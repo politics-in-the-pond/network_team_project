@@ -51,7 +51,7 @@ public class FriendList extends JFrame{
 		try {
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 		} catch(Exception ex) {}
-		new MyTreeExam();
+		new FriendList();
 	}
 
 }
