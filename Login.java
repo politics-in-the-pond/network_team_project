@@ -2,6 +2,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 public class Login extends JFrame{
+	JoinDB jdb;
 	public Login() {
 		JPanel panel = new JPanel();
 		JLabel idLabel = new JLabel("ID");
@@ -27,7 +28,22 @@ public class Login extends JFrame{
 			}
 		});
 
+		joinBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		
+		joinBtn.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				jdb = new JoinDB();
+				jdb.JoinDBPanel();
+			}
+		});
 		add(panel);
 		setVisible(true);
 		setSize(600,400);
