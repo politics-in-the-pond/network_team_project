@@ -33,7 +33,7 @@ public class String_crypto {
 		byte seed3[] = new byte[4];
 		byte seed4[] = new byte[4];
 		
-		System.arraycopy(check_sum, 0, seed1, 0, 4); //Ã¼Å©¼¶±â¹İÀ¸·Î ½Ãµå»ı¼º
+		System.arraycopy(check_sum, 0, seed1, 0, 4); //ì²´í¬ì„¬ê¸°ë°˜ìœ¼ë¡œ ì‹œë“œìƒì„±
 		System.arraycopy(check_sum, 4, seed2, 0, 4);
 		System.arraycopy(check_sum, 8, seed3, 0, 4);
 		System.arraycopy(check_sum, 12, seed4, 0, 4);
@@ -42,7 +42,7 @@ public class String_crypto {
 		byte IV[] = new byte[16];
 		byte tempkey[] = new byte[4];
 		
-		tempkey = MT19937(seed1); //key¿Í ÃÊ±âÈ­º¤ÅÍ »ı¼º
+		tempkey = MT19937(seed1); //keyì™€ ì´ˆê¸°í™”ë²¡í„° ìƒì„±
 		System.arraycopy(tempkey, 0, key, 0, 4);
 		System.arraycopy(tempkey, 4, IV, 0, 4);
 		tempkey = MT19937(seed2);
@@ -55,7 +55,7 @@ public class String_crypto {
 		System.arraycopy(tempkey, 0, key, 12, 4);
 		System.arraycopy(tempkey, 4, IV, 12, 4);
 		
-		//AES128 ¾ÏÈ£È­ ½ÇÇà key = key[]
+		//AES128 ì•”í˜¸í™” ì‹¤í–‰ key = key[]
 		Key AES_key = new SecretKeySpec(key,"AES");
 		Cipher AES;
 		byte[] result = null;
@@ -82,9 +82,9 @@ public class String_crypto {
 		System.arraycopy(result, 0, send, 0, result.length);
 		System.arraycopy(check_sum, 0, send, result.length, 20);
 		
-		//¿©±âºÎÅÍ**********************************************************************************
+		//ì—¬ê¸°ë¶€í„°**********************************************************************************
 		//System.out.println("_________________________________________________________________"); 
-		System.out.println("¿øº» :");
+		System.out.println("ì›ë³¸ :");
 		
 		String s1 = new String(buffer);
 		//String s2 = test(check_sum);
@@ -93,13 +93,13 @@ public class String_crypto {
 		String s5 = new String(send);
 		
 		System.out.println(s1);
-		//System.out.println("Ã¼Å©¼¶ : " + s2 );
+		//System.out.println("ì²´í¬ì„¬ : " + s2 );
 		//System.out.println("AES_KEY : " + s3 );
-		//System.out.println("ÃÊ±âÈ­º¤ÅÍ : " + s4 );
-		//System.out.println("°á°ú¹° : " + test(send));
-		System.out.println("¾ÏÈ£È­µÈ ¹®Àå :");
+		//System.out.println("ì´ˆê¸°í™”ë²¡í„° : " + s4 );
+		//System.out.println("ê²°ê³¼ë¬¼ : " + test(send));
+		System.out.println("ì•”í˜¸í™”ëœ ë¬¸ì¥ :");
 		System.out.println(s5);
-		//¿©±â±îÁö Å×½ºÆ®¿ë****************************************************************************
+		//ì—¬ê¸°ê¹Œì§€ í…ŒìŠ¤íŠ¸ìš©****************************************************************************
 		
 		return send;
 	}
@@ -114,10 +114,10 @@ public class String_crypto {
 		byte seed3[] = new byte[4];
 		byte seed4[] = new byte[4];
 		
-		System.arraycopy(b, b.length-20, check_sum, 0, 20); //Ã¼Å©¼¶°ú ¹®ÀåºĞ¸®
+		System.arraycopy(b, b.length-20, check_sum, 0, 20); //ì²´í¬ì„¬ê³¼ ë¬¸ì¥ë¶„ë¦¬
 		System.arraycopy(b, 0, s, 0, b.length-20);
 		
-		System.arraycopy(check_sum, 0, seed1, 0, 4); //Ã¼Å©¼¶±â¹İÀ¸·Î ½Ãµå»ı¼º
+		System.arraycopy(check_sum, 0, seed1, 0, 4); //ì²´í¬ì„¬ê¸°ë°˜ìœ¼ë¡œ ì‹œë“œìƒì„±
 		System.arraycopy(check_sum, 4, seed2, 0, 4);
 		System.arraycopy(check_sum, 8, seed3, 0, 4);
 		System.arraycopy(check_sum, 12, seed4, 0, 4);
@@ -126,7 +126,7 @@ public class String_crypto {
 		byte IV[] = new byte[16];
 		byte tempkey[] = new byte[4];
 		
-		tempkey = MT19937(seed1); //key¿Í ÃÊ±âÈ­º¤ÅÍ »ı¼º
+		tempkey = MT19937(seed1); //keyì™€ ì´ˆê¸°í™”ë²¡í„° ìƒì„±
 		System.arraycopy(tempkey, 0, key, 0, 4);
 		System.arraycopy(tempkey, 4, IV, 0, 4);
 		tempkey = MT19937(seed2);
@@ -139,7 +139,7 @@ public class String_crypto {
 		System.arraycopy(tempkey, 0, key, 12, 4);
 		System.arraycopy(tempkey, 4, IV, 12, 4);
 	
-		//AES128 º¹È£È­ ½ÇÇà key = key[]
+		//AES128 ë³µí˜¸í™” ì‹¤í–‰ key = key[]
 		Key AES_key = new SecretKeySpec(key,"AES");
 		Cipher AES;
 		byte[] result = null;
@@ -164,8 +164,8 @@ public class String_crypto {
 		
 		check_sum_Contrast = checksum(result);
 		
-		//¿©±âºÎÅÍ**********************************************************************************
-		System.out.println("º¹È£È­ °á°ú :"); 
+		//ì—¬ê¸°ë¶€í„°**********************************************************************************
+		System.out.println("ë³µí˜¸í™” ê²°ê³¼ :"); 
 		
 		String s1 = new String(result);
 		//String s2 = test(check_sum);
@@ -174,14 +174,14 @@ public class String_crypto {
 		//String s5 = test(IV);
 
 		System.out.println(s1);
-		//System.out.println("Ã¼Å©¼¶ : " + s2 );
-		//System.out.println("´ëÁ¶¿ë Ã¼Å©¼¶ : " + s3 );
+		//System.out.println("ì²´í¬ì„¬ : " + s2 );
+		//System.out.println("ëŒ€ì¡°ìš© ì²´í¬ì„¬ : " + s3 );
 		//System.out.println("AES_KEY : " + s4 );
-		//System.out.println("ÃÊ±âÈ­º¤ÅÍ : " + s5 );	
+		//System.out.println("ì´ˆê¸°í™”ë²¡í„° : " + s5 );	
 		System.out.println("___________________________________________________________________"); 
-		//¿©±â±îÁö Å×½ºÆ®¿ë****************************************************************************
+		//ì—¬ê¸°ê¹Œì§€ í…ŒìŠ¤íŠ¸ìš©****************************************************************************
 
-		if(!Arrays.equals(check_sum, check_sum_Contrast)) { //ÇØ½Ã°ª ´Ù¸¦°æ¿ì (¸Ş½ÃÁö°¡ º¯Á¶µÇ¾úÀ» °æ¿ì)
+		if(!Arrays.equals(check_sum, check_sum_Contrast)) { //í•´ì‹œê°’ ë‹¤ë¥¼ê²½ìš° (ë©”ì‹œì§€ê°€ ë³€ì¡°ë˜ì—ˆì„ ê²½ìš°)
 			return "decrypt error.";
 		}
 		
@@ -190,7 +190,7 @@ public class String_crypto {
 		return send;
 	}
 	
-	private byte[] MT19937(byte[] seed) { //¸Ş¸£¼¾ Æ®À§½ºÅÍ ±¸ÇöºÎ. unsignedÇüÀÌ ¾ø¾î ¿øº»ÀÇ MT19937°ú´Â °á°ú°ªÀÌ ´Ù¸¦ ¼öµµ ÀÖÀ» °ÍÀ¸·Î ¿¹»ó.
+	private byte[] MT19937(byte[] seed) { //ë©”ë¥´ì„¼ íŠ¸ìœ„ìŠ¤í„° êµ¬í˜„ë¶€. unsignedí˜•ì´ ì—†ì–´ ì›ë³¸ì˜ MT19937ê³¼ëŠ” ê²°ê³¼ê°’ì´ ë‹¤ë¥¼ ìˆ˜ë„ ìˆì„ ê²ƒìœ¼ë¡œ ì˜ˆìƒ.
 		
 		long mt[] = new long[N];
 		int mti=N+1;
@@ -253,7 +253,7 @@ public class String_crypto {
 	}
 	
 	@SuppressWarnings("unused")
-	private String test(byte[] s) {
+	public String test(byte[] s) {
 		StringBuffer hexString = new StringBuffer();
 		for (int i = 0; i < s.length; i++)
 			hexString.append(Integer.toHexString(0xFF & s[i]));
