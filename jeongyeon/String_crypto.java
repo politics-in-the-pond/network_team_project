@@ -20,12 +20,6 @@ public class String_crypto {
 		
 		buffer = s.getBytes();
 		check_sum = checksum(buffer);
-		
-		StringBuffer hexString = new StringBuffer();
-        for (int i = 0; i < check_sum.length; i++)
-            hexString.append(Integer.toHexString(0xFF & check_sum[i]));
-        
-        String s3 = hexString.toString();
 				
 		byte seed1[] = new byte[4];
 		byte seed2[] = new byte[4];
@@ -38,31 +32,36 @@ public class String_crypto {
 		System.arraycopy(check_sum, 12, seed4, 0, 4);
 		
 		byte key[] = new byte[16];
+		byte IV[] = new byte[16];
 		byte tempkey[] = new byte[4];
 		
 		tempkey = MT19937(seed1);
 		System.arraycopy(tempkey, 0, key, 0, 4);
+		System.arraycopy(tempkey, 4, IV, 0, 4);
 		tempkey = MT19937(seed2);
 		System.arraycopy(tempkey, 0, key, 4, 4);
+		System.arraycopy(tempkey, 4, IV, 4, 4);
 		tempkey = MT19937(seed3);
 		System.arraycopy(tempkey, 0, key, 8, 4);
+		System.arraycopy(tempkey, 4, IV, 8, 4);
 		tempkey = MT19937(seed4);
 		System.arraycopy(tempkey, 0, key, 12, 4);
+		System.arraycopy(tempkey, 4, IV, 12, 4);
 		
-		StringBuffer hexString2 = new StringBuffer();
-        for (int i = 0; i < key.length; i++)
-            hexString2.append(Integer.toHexString(0xFF & key[i]));
-        
-        String s1 = hexString2.toString();
+		String s3 = test(check_sum); //여기부터
+		String s1 = test(key);
+		String s4 = test(IV);
 		
-		System.out.println("문자열 : " + s + "		/해시 : " + s3 + "		/AES키 : " + s1);
+		System.out.println("문자열 : " + s );
+		System.out.println("체크섬 : " + s3 );
+		System.out.println("AES_KEY : " + s1 );
+		System.out.println("초기화벡터 : " + s4 );
+		System.out.println("_________________________________________________________________________"); //여기까지 테스트용
 		
 		//AES128 암호화 실행 key = key[]
 		
 		return (byte[]) null;
 	}
-	
-	
 	
 	private String decrypt(byte[] b) {
 		byte[] check_sum = new byte[20];
@@ -160,6 +159,17 @@ public class String_crypto {
 		}
 		
 		return message_bin;
+	}
+	
+	private String test(byte[] s) {
+		
+		StringBuffer hexString = new StringBuffer();
+		for (int i = 0; i < s.length; i++)
+			hexString.append(Integer.toHexString(0xFF & s[i]));
+        
+		String s3 = hexString.toString();
+		
+		return s3;
 	}
 	
 	private int btoi(byte[] arr){
