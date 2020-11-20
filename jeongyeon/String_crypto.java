@@ -33,7 +33,7 @@ public class String_crypto {
 		byte seed3[] = new byte[4];
 		byte seed4[] = new byte[4];
 		
-		System.arraycopy(check_sum, 0, seed1, 0, 4);
+		System.arraycopy(check_sum, 0, seed1, 0, 4); //체크섬기반으로 시드생성
 		System.arraycopy(check_sum, 4, seed2, 0, 4);
 		System.arraycopy(check_sum, 8, seed3, 0, 4);
 		System.arraycopy(check_sum, 12, seed4, 0, 4);
@@ -42,7 +42,7 @@ public class String_crypto {
 		byte IV[] = new byte[16];
 		byte tempkey[] = new byte[4];
 		
-		tempkey = MT19937(seed1);
+		tempkey = MT19937(seed1); //key와 초기화벡터 생성
 		System.arraycopy(tempkey, 0, key, 0, 4);
 		System.arraycopy(tempkey, 4, IV, 0, 4);
 		tempkey = MT19937(seed2);
@@ -55,10 +55,7 @@ public class String_crypto {
 		System.arraycopy(tempkey, 0, key, 12, 4);
 		System.arraycopy(tempkey, 4, IV, 12, 4);
 		
-		
-		
 		//AES128 암호화 실행 key = key[]
-		
 		Key AES_key = new SecretKeySpec(key,"AES");
 		Cipher AES;
 		byte[] result = null;
@@ -85,7 +82,8 @@ public class String_crypto {
 		System.arraycopy(result, 0, send, 0, result.length);
 		System.arraycopy(check_sum, 0, send, result.length, 20);
 		
-		//System.out.println("___________________________________________________________________"); //여기부터
+		//여기부터**********************************************************************************
+		//System.out.println("_________________________________________________________________"); 
 		System.out.println("원본 :");
 		
 		String s1 = new String(buffer);
@@ -101,7 +99,7 @@ public class String_crypto {
 		//System.out.println("결과물 : " + test(send));
 		System.out.println("암호화된 문장 :");
 		System.out.println(s5);
-		//여기까지 테스트용
+		//여기까지 테스트용****************************************************************************
 		
 		return send;
 	}
@@ -116,10 +114,10 @@ public class String_crypto {
 		byte seed3[] = new byte[4];
 		byte seed4[] = new byte[4];
 		
-		System.arraycopy(b, b.length-20, check_sum, 0, 20);
+		System.arraycopy(b, b.length-20, check_sum, 0, 20); //체크섬과 문장분리
 		System.arraycopy(b, 0, s, 0, b.length-20);
 		
-		System.arraycopy(check_sum, 0, seed1, 0, 4);
+		System.arraycopy(check_sum, 0, seed1, 0, 4); //체크섬기반으로 시드생성
 		System.arraycopy(check_sum, 4, seed2, 0, 4);
 		System.arraycopy(check_sum, 8, seed3, 0, 4);
 		System.arraycopy(check_sum, 12, seed4, 0, 4);
@@ -128,7 +126,7 @@ public class String_crypto {
 		byte IV[] = new byte[16];
 		byte tempkey[] = new byte[4];
 		
-		tempkey = MT19937(seed1);
+		tempkey = MT19937(seed1); //key와 초기화벡터 생성
 		System.arraycopy(tempkey, 0, key, 0, 4);
 		System.arraycopy(tempkey, 4, IV, 0, 4);
 		tempkey = MT19937(seed2);
@@ -164,9 +162,10 @@ public class String_crypto {
 			e.printStackTrace();
 		}
 		
-		check_sum_Contrast = checksum(s);
+		check_sum_Contrast = checksum(result);
 		
-		System.out.println("복호화 결과 :"); //여기부터
+		//여기부터**********************************************************************************
+		System.out.println("복호화 결과 :"); 
 		
 		String s1 = new String(result);
 		//String s2 = test(check_sum);
@@ -180,16 +179,18 @@ public class String_crypto {
 		//System.out.println("AES_KEY : " + s4 );
 		//System.out.println("초기화벡터 : " + s5 );	
 		System.out.println("___________________________________________________________________"); 
-		//여기까지 테스트용
+		//여기까지 테스트용****************************************************************************
 
 		if(!Arrays.equals(check_sum, check_sum_Contrast)) { //해시값 다를경우 (메시지가 변조되었을 경우)
 			return "decrypt error.";
 		}
 		
-		return (String) null;
+		String send = new String(result);
+		
+		return send;
 	}
 	
-	private byte[] MT19937(byte[] seed) { //메르센 트위스터 구현부. unsigned형이 없어 원본의 MT19937과는 결과값이 다를걸로 예상.
+	private byte[] MT19937(byte[] seed) { //메르센 트위스터 구현부. unsigned형이 없어 원본의 MT19937과는 결과값이 다를 수도 있을 것으로 예상.
 		
 		long mt[] = new long[N];
 		int mti=N+1;
@@ -245,22 +246,18 @@ public class String_crypto {
 			byte[] byteData = new byte[20];
 			byteData = md.digest();
 			return byteData;
-            
 		} catch(NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		}
-		
 		return message_bin;
 	}
 	
+	@SuppressWarnings("unused")
 	private String test(byte[] s) {
-		
 		StringBuffer hexString = new StringBuffer();
 		for (int i = 0; i < s.length; i++)
 			hexString.append(Integer.toHexString(0xFF & s[i]));
-        
 		String s3 = hexString.toString();
-		
 		return s3;
 	}
 	
