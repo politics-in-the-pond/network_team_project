@@ -5,10 +5,10 @@ import javax.swing.tree.*;
 
 public class FriendList extends JFrame{
 	JTree tree;
-	DefaultMutableTreeNode root = new DefaultMutableTreeNode("Ä£±¸¸ñ·Ï");
+	DefaultMutableTreeNode root = new DefaultMutableTreeNode("ì¹œêµ¬ëª©ë¡");
 	public FriendList() {
-		DefaultMutableTreeNode online = new DefaultMutableTreeNode("Á¢¼ÓÁßÀÎ Ä£±¸");
-		DefaultMutableTreeNode offline = new DefaultMutableTreeNode("ºñÁ¢¼ÓÁßÀÎ Ä£±¸");
+		DefaultMutableTreeNode online = new DefaultMutableTreeNode("ì ‘ì†ì¤‘ì¸ ì¹œêµ¬");
+		DefaultMutableTreeNode offline = new DefaultMutableTreeNode("ë¹„ì ‘ì†ì¤‘ì¸ ì¹œêµ¬");
 		
 		DefaultMutableTreeNode f1 = new DefaultMutableTreeNode("A");
 		DefaultMutableTreeNode f2 = new DefaultMutableTreeNode("B");
@@ -19,7 +19,7 @@ public class FriendList extends JFrame{
 		root.add(online);
 		root.add(offline);
 		
-		online.add(f1); //ÀÌ ÄÚµå¸¦ ÀÌ¿ëÇØ Ä£±¸ÀÇ ¿Â,¿ÀÇÁ¶óÀÎ È®ÀÎ
+		online.add(f1); //ì´ ì½”ë“œë¥¼ ì´ìš©í•´ ì¹œêµ¬ì˜ ì˜¨,ì˜¤í”„ë¼ì¸ í™•ì¸
 		online.add(f2);
 		online.add(f3);
 		
