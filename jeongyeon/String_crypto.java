@@ -1,9 +1,16 @@
 package my_package;
 
 import java.nio.ByteBuffer;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.Key;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+
 import javax.crypto.*;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 
 public class String_crypto {
 	
@@ -13,7 +20,7 @@ public class String_crypto {
 	final long UMASK = 0x80000000L;
 	final long LMASK = 0x7fffffffL;
 
-	private byte[] encrypt(String s) {
+	private byte[] encrypt(String s){
 		
 		byte[] buffer;
 		byte[] check_sum = new byte[20];
@@ -48,24 +55,61 @@ public class String_crypto {
 		System.arraycopy(tempkey, 0, key, 12, 4);
 		System.arraycopy(tempkey, 4, IV, 12, 4);
 		
-		String s3 = test(check_sum); //여기부터
-		String s1 = test(key);
-		String s4 = test(IV);
 		
-		System.out.println("문자열 : " + s );
-		System.out.println("체크섬 : " + s3 );
-		System.out.println("AES_KEY : " + s1 );
-		System.out.println("초기화벡터 : " + s4 );
-		System.out.println("_________________________________________________________________________"); //여기까지 테스트용
 		
 		//AES128 암호화 실행 key = key[]
 		
-		return (byte[]) null;
+		Key AES_key = new SecretKeySpec(key,"AES");
+		Cipher AES;
+		byte[] result = null;
+		
+		try {
+			AES = Cipher.getInstance("AES/CBC/PKCS5Padding");
+			AES.init(Cipher.ENCRYPT_MODE, AES_key, new IvParameterSpec(IV));
+			result = AES.doFinal(buffer);
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		} catch (NoSuchPaddingException e) {
+			e.printStackTrace();
+		} catch (InvalidKeyException e) {
+			e.printStackTrace();
+		} catch (InvalidAlgorithmParameterException e) {
+			e.printStackTrace();
+		} catch (IllegalBlockSizeException e) {
+			e.printStackTrace();
+		} catch (BadPaddingException e) {
+			e.printStackTrace();
+		}
+		
+		byte[] send = new byte[result.length + 20];
+		System.arraycopy(result, 0, send, 0, result.length);
+		System.arraycopy(check_sum, 0, send, result.length, 20);
+		
+		//System.out.println("___________________________________________________________________"); //여기부터
+		System.out.println("원본 :");
+		
+		String s1 = new String(buffer);
+		//String s2 = test(check_sum);
+		//String s3 = test(key);
+		//String s4 = test(IV);
+		String s5 = new String(send);
+		
+		System.out.println(s1);
+		//System.out.println("체크섬 : " + s2 );
+		//System.out.println("AES_KEY : " + s3 );
+		//System.out.println("초기화벡터 : " + s4 );
+		//System.out.println("결과물 : " + test(send));
+		System.out.println("암호화된 문장 :");
+		System.out.println(s5);
+		//여기까지 테스트용
+		
+		return send;
 	}
 	
 	private String decrypt(byte[] b) {
 		byte[] check_sum = new byte[20];
-		byte[] s = null;
+		byte[] check_sum_Contrast = new byte[20];
+		byte[] s = new byte[b.length-20];
 		
 		byte seed1[] = new byte[4];
 		byte seed2[] = new byte[4];
@@ -81,18 +125,66 @@ public class String_crypto {
 		System.arraycopy(check_sum, 12, seed4, 0, 4);
 		
 		byte key[] = new byte[16];
+		byte IV[] = new byte[16];
 		byte tempkey[] = new byte[4];
 		
 		tempkey = MT19937(seed1);
 		System.arraycopy(tempkey, 0, key, 0, 4);
+		System.arraycopy(tempkey, 4, IV, 0, 4);
 		tempkey = MT19937(seed2);
 		System.arraycopy(tempkey, 0, key, 4, 4);
+		System.arraycopy(tempkey, 4, IV, 4, 4);
 		tempkey = MT19937(seed3);
 		System.arraycopy(tempkey, 0, key, 8, 4);
+		System.arraycopy(tempkey, 4, IV, 8, 4);
 		tempkey = MT19937(seed4);
 		System.arraycopy(tempkey, 0, key, 12, 4);
+		System.arraycopy(tempkey, 4, IV, 12, 4);
 	
 		//AES128 복호화 실행 key = key[]
+		Key AES_key = new SecretKeySpec(key,"AES");
+		Cipher AES;
+		byte[] result = null;
+		
+		try {
+			AES = Cipher.getInstance("AES/CBC/PKCS5Padding");
+			AES.init(Cipher.DECRYPT_MODE, AES_key, new IvParameterSpec(IV));
+			result = AES.doFinal(s);
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		} catch (NoSuchPaddingException e) {
+			e.printStackTrace();
+		} catch (InvalidKeyException e) {
+			e.printStackTrace();
+		} catch (InvalidAlgorithmParameterException e) {
+			e.printStackTrace();
+		} catch (IllegalBlockSizeException e) {
+			e.printStackTrace();
+		} catch (BadPaddingException e) {
+			e.printStackTrace();
+		}
+		
+		check_sum_Contrast = checksum(s);
+		
+		System.out.println("복호화 결과 :"); //여기부터
+		
+		String s1 = new String(result);
+		//String s2 = test(check_sum);
+		//String s3 = test(check_sum_Contrast);
+		//String s4 = test(key);
+		//String s5 = test(IV);
+
+		System.out.println(s1);
+		//System.out.println("체크섬 : " + s2 );
+		//System.out.println("대조용 체크섬 : " + s3 );
+		//System.out.println("AES_KEY : " + s4 );
+		//System.out.println("초기화벡터 : " + s5 );	
+		System.out.println("___________________________________________________________________"); 
+		//여기까지 테스트용
+
+		if(!Arrays.equals(check_sum, check_sum_Contrast)) { //해시값 다를경우 (메시지가 변조되었을 경우)
+			return "decrypt error.";
+		}
 		
 		return (String) null;
 	}
@@ -149,10 +241,10 @@ public class String_crypto {
 	private byte[] checksum(byte[] message_bin){
 		try {
 			MessageDigest md = MessageDigest.getInstance("SHA-1");
-            md.update(message_bin);
-            byte[] byteData = new byte[20];
-            byteData = md.digest();
-            return byteData;
+			md.update(message_bin);
+			byte[] byteData = new byte[20];
+			byteData = md.digest();
+			return byteData;
             
 		} catch(NoSuchAlgorithmException e) {
 			e.printStackTrace();
