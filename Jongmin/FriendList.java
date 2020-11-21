@@ -2,6 +2,9 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.tree.*;
+import java.sql.*;
+import java.util.*;
+
 
 public class FriendList extends JFrame{
 	JTree tree;
@@ -47,8 +50,89 @@ public class FriendList extends JFrame{
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
 	}
+	
+	public static void test() {
+		 
+        // variables
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+ 
+        // Step 1: Loading or registering MySQL JDBC driver class
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        }
+        catch(ClassNotFoundException cnfex) {
+            System.out.println("Problem in loading MySQL JDBC driver");
+            cnfex.printStackTrace();
+        }
+ 
+        // Step 2: Opening database connection
+        try {
+ 
+            // Step 2.A: Create and get connection using DriverManager
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/chat?serverTimezone=UTC", "root", "000110"); 
+ 
+            // create SQL query to fetch all player records
+            String sqlSelectQuery = "SELECT id, name, nickname,birthdate FROM users";
+ 
+            // Step 2.B: Creating JDBC Statement 
+             preparedStatement = connection.prepareStatement(sqlSelectQuery);
+ 
+            // Step 2.C: Executing SQL & retrieve data into ResultSet
+            resultSet = preparedStatement.executeQuery();
+ 
+            System.out.println("ID\t이름\t별명\t생일");
+            System.out.println("==\t====\t===\t====");
+ 
+            // processing returned data and printing into console
+            while(resultSet.next()) {
+                System.out.println(resultSet.getString(1) + "\t" + 
+                        resultSet.getString(2) + "\t" + 
+                        resultSet.getString(3) + "\t" +
+                        resultSet.getDate(4));
+            }
+        }
+        catch(SQLException sqlex){
+            sqlex.printStackTrace();
+        }
+        finally {
+ 
+            // Step 3: Closing database connection
+            try {
+                if(null != connection) {
+ 
+                    // cleanup resources, once after processing
+                    resultSet.close();
+                    preparedStatement.close();
+ 
+                    // and then finally close connection
+                    connection.close();
+                }
+            }
+            catch (SQLException sqlex) {
+                sqlex.printStackTrace();
+            }
+        }
+    }
+		
+	
+	
 	public static void main(String[] args) {
 		try {
+			String id = "000001";
+			String pw = "000110";
+			
+			User userdb = new User();
+			
+			int result = 0;
+			result = userdb.checkIDPW(id, pw);
+			
+			System.out.println("결과:" + result);
+			
+			
+			test();
+			
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 		} catch(Exception ex) {}
 		new FriendList();
