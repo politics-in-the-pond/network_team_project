@@ -1,0 +1,24 @@
+String_crypto 객체 생성 후 사용
+
+암호화의 경우 :
+  String_crypto.do_encrypt( String );
+  결과는 byte[] 형으로 리턴됩니다.
+  
+복호화의 경우 :
+  String_crypto.do_decrypt( byte[] );
+  결과는 String 형으로 리턴됩니다.
+  
+AES128의 key와 초기화벡터는 체크섬을 기반으로 메르센트위스터를 이용하여 난수를 생성해 만들어집니다.
+전송받은 암호화된 문장이 손상된 경우 do_decrypt시 "decrypt error."를 반환합니다. (아래참조)
+
+if(!Arrays.equals(check_sum, check_sum_Contrast)) { //해시값 다를경우 (메시지가 변조되었을 경우)
+      ***필요한 대로 이 부분을 바꿔주세요***
+			return "decrypt error.";
+		}
+    
+    
+***테스트라고 주석 달아놓은 부분 삭제해도 됩니다***
+
+
+체크섬 생성 메소드도 있어서 로그인할 때도 사용하면 될 것 같아요...?
+이 경우 test(checksum( 비밀번호 )); 하면 스트링으로 변환되어 DB에 넣기 편해집니다.
