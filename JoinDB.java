@@ -9,37 +9,64 @@ public class JoinDB implements MouseListener {
 	JPanel logPanel1;
 	JPanel logPanel2;
 	JPanel logPanel3;
-	JTextField idText, pwText,nameText, birthText = null;
+	JTextField idText,nameText, birthText, nickText, emailText, pnumText, homeText = null;
+	JPasswordField pwText, pwCheckText = null;
 	JButton joinBtn, checkBtn;
 	void JoinDBPanel() {
 		frame = new JFrame("Join");
 		logPanel = new JPanel();
-		logPanel1 =  new JPanel(new GridLayout(4,1));
-		logPanel2 = new JPanel(new GridLayout(4,1));
+		logPanel1 =  new JPanel(new GridLayout(9,1));
+		logPanel2 = new JPanel(new GridLayout(9,1));
 		logPanel3 = new JPanel();
 		
 		JLabel idLabel = new JLabel("ID", JLabel.CENTER);
 		JLabel pwLabel = new JLabel("PW", JLabel.CENTER);
+		JLabel pwCheckLabel = new JLabel("Check PW", JLabel.CENTER);
+		JLabel nickLabel = new JLabel("Nickname", JLabel.CENTER);
+		JLabel emailLabel = new JLabel("E-Mail", JLabel.CENTER);
 		JLabel nameLabel = new JLabel("Name", JLabel.CENTER);
-		JLabel birthLabel = new JLabel("Birth Date\nyy/mm/dd", JLabel.CENTER);
+		JLabel birthLabel = new JLabel("Birth Date"+"\n"+"yy/mm/dd", JLabel.CENTER);
+		JLabel pnumLabel = new JLabel("Phone number(option) ", JLabel.CENTER);
+		JLabel homeLabel = new JLabel("Homepage address(option)", JLabel.CENTER);
+		
 		logPanel1.add(idLabel);
 		logPanel1.add(pwLabel);
+		logPanel1.add(pwCheckLabel);
+		logPanel1.add(nickLabel);
+		logPanel1.add(emailLabel);
 		logPanel1.add(nameLabel);
 		logPanel1.add(birthLabel);
+		logPanel1.add(pnumLabel);
+		logPanel1.add(homeLabel);
 		
 		idText = new JTextField(20);
 		idText.addMouseListener(this);
-		pwText = new JTextField(20);
+		pwText = new JPasswordField(20);
 		pwText.addMouseListener(this);
+		pwCheckText = new JPasswordField(20);
+		pwCheckText.addMouseListener(this);
+		nickText = new JTextField(20);
+		nickText.addMouseListener(this);
+		emailText = new JTextField(20);
+		emailText.addMouseListener(this);
 		nameText = new JTextField(20);
 		nameText.addMouseListener(this);
 		birthText = new JTextField(20);
 		birthText.addMouseListener(this);
+		pnumText = new JTextField(20);
+		pnumText.addMouseListener(this);
+		homeText = new JTextField(50);
+		homeText.addMouseListener(this);
 		
 		logPanel2.add(idText);
 		logPanel2.add(pwText);
+		logPanel2.add(pwCheckText);
+		logPanel2.add(nickText);
+		logPanel2.add(emailText);
 		logPanel2.add(nameText);
 		logPanel2.add(birthText);
+		logPanel2.add(pnumText);
+		logPanel2.add(homeText);
 		
 		checkBtn = new JButton("Check ID");
 		logPanel3.add(checkBtn, BorderLayout.NORTH);
@@ -88,10 +115,20 @@ public class JoinDB implements MouseListener {
 			idText.setText("");
 		else if(e.getSource().equals(pwText))
 			pwText.setText("");
+		else if(e.getSource().equals(pwCheckText))
+			pwText.setText("");
+		else if(e.getSource().equals(nickText))
+			pwText.setText("");
+		else if(e.getSource().equals(emailText))
+			pwText.setText("");
 		else if(e.getSource().equals(nameText))
 			nameText.setText("");
 		else if(e.getSource().equals(birthText))
 			birthText.setText("");
+		else if(e.getSource().equals(pnumText))
+			pwText.setText("");
+		else if(e.getSource().equals(homeText))
+			pwText.setText("");
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			info = new Properties();
@@ -103,11 +140,14 @@ public class JoinDB implements MouseListener {
 			if(e.getSource().equals(checkBtn)) {
 				sql = "select * from joinDB where id = '" + idText.getText() + "'";
 				rs = stmt.executeQuery(sql);
-				if(rs.next() == true || (idText.getText().isEmpty()) == true || (nameText.getText().isEmpty()) || (birthText.getText().isEmpty())) {
+				if(rs.next() == true || (idText.getText().isEmpty()) == true || (nameText.getText().isEmpty()) ||(nickText.getText().isEmpty())||(emailText.getText().isEmpty())|| (birthText.getText().isEmpty())) {
 					JOptionPane.showMessageDialog(logPanel3, "Empty value");
 	
 				}else if((birthText.getText().length()) != 6)
 					JOptionPane.showMessageDialog(logPanel3, "Invalid birth date");
+				else if((pwText.getText() != pwCheckText.getText()){
+					JOptionPane.showMessageDialog(logPanel3, "Passwords do not match");
+				}
 				else {
 					sql = "insert into joinDB values ('" + idText.getText() + "','" + pwText.getText() + "','"
 							+ nameText.getText() + "','" + birthText.getText() + "')";
@@ -155,3 +195,4 @@ public class JoinDB implements MouseListener {
 	}
 
 }
+
