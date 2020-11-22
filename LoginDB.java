@@ -7,7 +7,7 @@ public class LoginDB{
 	
 	Statement stmt = null;
 	ResultSet rs = null;
-	String url = "jdbc:mysql://localhost:3306/BBS?serverTimezone=UTC";
+	String url = "jjdbc:mysql://localhost/member";
 	String sql = null;
 	Properties info = null;
 	Connection conn = null;
@@ -20,7 +20,7 @@ public class LoginDB{
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			info = new Properties();
 			info.setProperty("user", "root");
-			info.setProperty("password","000110");
+			info.setProperty("password","12345");
 			conn = DriverManager.getConnection(url, info);
 			stmt = conn.createStatement();
 			
