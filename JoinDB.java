@@ -140,12 +140,16 @@ public class JoinDB implements MouseListener {
 			if(e.getSource().equals(checkBtn)) {
 				sql = "select * from joinDB where id = '" + idText.getText() + "'";
 				rs = stmt.executeQuery(sql);
+				if(rs.getString("id").equals(idText))
+					JOptionPane.showMessageDialog(logPanel3, "Unavailable ID");
+				else
+					JOptionPane.showMessageDialog(logPanel3, "Available ID");
 				if(rs.next() == true || (idText.getText().isEmpty()) == true || (nameText.getText().isEmpty()) ||(nickText.getText().isEmpty())||(emailText.getText().isEmpty())|| (birthText.getText().isEmpty())) {
 					JOptionPane.showMessageDialog(logPanel3, "Empty value");
 	
 				}else if((birthText.getText().length()) != 6)
 					JOptionPane.showMessageDialog(logPanel3, "Invalid birth date");
-				else if((pwText.getText() != pwCheckText.getText()){
+				else if(pwText.getPassword() != pwCheckText.getPassword()){
 					JOptionPane.showMessageDialog(logPanel3, "Passwords do not match");
 				}
 				else {
@@ -193,6 +197,4 @@ public class JoinDB implements MouseListener {
 			e1.printStackTrace();
 		}
 	}
-
 }
-
