@@ -1,0 +1,3 @@
+create database member;
+use memeber;
+create table user(id varchar(20) primary key, pw varchar(20), nickname varchar(20), birthDate varchar(6), email varchar(20), name varchar(20), pnumber varchar(11), home varchar(50));
