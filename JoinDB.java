@@ -47,7 +47,7 @@ public class JoinDB implements MouseListener {
 		pwCheckText.addMouseListener(this);
 		nickText = new JTextField(20);
 		nickText.addMouseListener(this);
-		emailText = new JTextField(20);
+		emailText = new JTextField(50);
 		emailText.addMouseListener(this);
 		nameText = new JTextField(20);
 		nameText.addMouseListener(this);
@@ -55,7 +55,7 @@ public class JoinDB implements MouseListener {
 		birthText.addMouseListener(this);
 		pnumText = new JTextField(11);
 		pnumText.addMouseListener(this);
-		homeText = new JTextField(50);
+		homeText = new JTextField(100);
 		homeText.addMouseListener(this);
 		
 		logPanel2.add(idText);
