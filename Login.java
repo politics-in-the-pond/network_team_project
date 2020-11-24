@@ -3,6 +3,7 @@ import javax.swing.*;
 
 public class Login extends JFrame{
 	JoinDB jdb;
+	LoginDB ljdb;
 	public Login() {
 		JPanel panel = new JPanel();
 		JLabel idLabel = new JLabel("ID");
@@ -13,6 +14,7 @@ public class Login extends JFrame{
 		JButton joinBtn = new JButton("Join");
 		
 		panel.add(idLabel);
+		
 		panel.add(pwLabel);
 		panel.add(idText);
 		panel.add(pwText);
@@ -22,12 +24,27 @@ public class Login extends JFrame{
 		logBtn.addActionListener(new ActionListener() {
 			@SuppressWarnings("deprecation")
 			@Override
+			
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, "Logged in");
+				
 
 			}
 		});
+		logBtn.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				ljdb = new LoginDB();
+				String id = idText.getText();
+				String pw = new String(pwText.getPassword());
+				int result = ljdb.checkIDPW(id,pw);
+				if(result == 0) {
+					JOptionPane.showMessageDialog(null,"Logged in");
+				}
+				else
+					JOptionPane.showMessageDialog(null,"Fail");
 
+			}
+		});
 		joinBtn.addActionListener(new ActionListener() {
 
 			@Override
