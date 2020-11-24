@@ -7,32 +7,29 @@ public class LoginDB{
 	
 	Statement stmt = null;
 	ResultSet rs = null;
-	String url = "jjdbc:mysql://localhost/member";
+	String url = "jdbc:mysql://localhost/users?serverTimezone=UTC&useSSL=false&&allowPublicKeyRetrieval=true&useSSL=false";
 	String sql = null;
-	Properties info = null;
 	Connection conn = null;
 	
 	int checkIDPW(String id, String pw) {
 		this.id = id;
 		this.pw = pw;
-		int result = 1;
+		int result = 0;
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			info = new Properties();
-			info.setProperty("user", "root");
-			info.setProperty("password","12345");
-			conn = DriverManager.getConnection(url, info);
+			String user = "root", passwd = "000110";
+			conn = DriverManager.getConnection(url, user,passwd);
 			stmt = conn.createStatement();
 			
-			sql = "select * from DB where id = '" + id +  "'";
+			sql = "select * from member where id = '" + id +  "'";
 			rs = stmt.executeQuery(sql);
 			if(rs.next() == false || (id.isEmpty()) == true ) {
 				result = 1;
 			}else {
-				sql = "select * from (select * from DB where id = '" + id + "')";
+				sql = "select * from (select * from member where id = '" + id + "')";
 				rs = stmt.executeQuery(sql);
 				while(rs.next() == true) {
-					if(rs.getString(2).equals(pw))
+					if(rs.getString("pw").equals(pw))
 						result = 0;
 					else
 						result = 1;
