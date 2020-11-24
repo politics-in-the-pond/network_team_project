@@ -105,7 +105,7 @@ public class JoinDB implements MouseListener {
 	Statement stmt = null;
 	ResultSet rs = null;
 	String sql = null;
-	String url = "jdbc:mysql://localhost/member";
+	String url = "jdbc:mysql://localhost/users?serverTimezone=UTC&useSSL=false&&allowPublicKeyRetrieval=true&useSSL=false";
 	Properties info = null;
 	Connection conn = null;
 	
@@ -133,35 +133,85 @@ public class JoinDB implements MouseListener {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			info = new Properties();
 			info.setProperty("user", "root");
-			info.setProperty("password", "12345");
+			info.setProperty("password", "000110");
 			conn = DriverManager.getConnection(url, info);
 			stmt = conn.createStatement();
 			
-			if(e.getSource().equals(checkBtn)) {
-				sql = "select * from joinDB where id = '" + idText.getText() + "'";
-				rs = stmt.executeQuery(sql);
-				if(rs.getString("id").equals(idText))
-					JOptionPane.showMessageDialog(logPanel3, "Unavailable ID");
-				else
-					JOptionPane.showMessageDialog(logPanel3, "Available ID");
-				if(rs.next() == true || (idText.getText().isEmpty()) == true || (nameText.getText().isEmpty()) ||(nickText.getText().isEmpty())||(emailText.getText().isEmpty())|| (birthText.getText().isEmpty())) {
-					JOptionPane.showMessageDialog(logPanel3, "Empty value");
-	
-				}else if((birthText.getText().length()) != 6)
-					JOptionPane.showMessageDialog(logPanel3, "Invalid birth date");
-				else if(pwText.getPassword() != pwCheckText.getPassword()){
-					JOptionPane.showMessageDialog(logPanel3, "Passwords do not match");
-				}
-				else {
-					sql = "insert into joinDB values ('" + idText.getText() + "','" + pwText.getText() + "','"
-							+ nameText.getText() + "','" + birthText.getText() + "')";
-					stmt.executeUpdate(sql);
+//			if(e.getSource().equals(checkBtn)) {
+//				sql = "select * from member where id = '" + idText.getText() + "'";
+//				rs = stmt.executeQuery(sql);
+//				while(rs.next()) {
+//					if(idText.getText().isEmpty())
+//						JOptionPane.showMessageDialog(logPanel3, "Unavailable ID");
+//					else
+//						JOptionPane.showMessageDialog(logPanel3, "Available ID");
+//					if(rs.next() == true || (idText.getText().isEmpty()) == true || (nameText.getText().isEmpty()) ||(nickText.getText().isEmpty())||(emailText.getText().isEmpty())|| (birthText.getText().isEmpty())) {
+//						JOptionPane.showMessageDialog(logPanel3, "Empty value");
+//		
+//					}else if((birthText.getText().length()) != 6)
+//						JOptionPane.showMessageDialog(logPanel3, "Invalid birth date");
+//					else if(pwText.getPassword() != pwCheckText.getPassword()){
+//						JOptionPane.showMessageDialog(logPanel3, "Passwords do not match");
+//					}
+//					else {
+//						sql = "insert into joinDB values ('" + idText.getText() + "','" + pwText.getText() + "','"
+//								+ nameText.getText() + "','" + birthText.getText() + "')";
+//						stmt.executeUpdate(sql);
+//						JOptionPane.showMessageDialog(logPanel3, "Joined!");
+//						frame.dispose();
+//						dbClose();
+//					}
+//				}
+//				
+//			}
+//		
+			if (e.getSource().equals(checkBtn)) {
+                sql = "select * from member where id='" + idText.getText() + "'";
+                rs = stmt.executeQuery(sql); // 읽어오는거라 다르다 비교해//리턴타입이 ResultSet
+ 
+                if (rs.next() == true || (idText.getText().isEmpty()) == true) { // 이미 id가 존재한다면
+                	JOptionPane.showMessageDialog(logPanel3, "Unavailable ID");                } 
+                else {
+                	JOptionPane.showMessageDialog(logPanel3, "Available ID");                }
+            }
+ 
+            // 가입 버튼
+            if (e.getSource().equals(joinBtn)) {
+                sql = "select * from member where id='" + idText.getText() + "'";
+ 
+                rs = stmt.executeQuery(sql); // 읽어오는거라 다르다 비교해//리턴타입이 ResultSet
+ 
+                if (rs.next() == true) { // 이미 id가 존재한다면
+                	JOptionPane.showMessageDialog(logPanel3, "Please check ID");    
+ 
+                } else if (idText.getText().isEmpty() || (nameText.getText().isEmpty()) ||(nickText.getText().isEmpty())||(emailText.getText().isEmpty())|| (birthText.getText().isEmpty())) {        //빈칸이 있을경우
+                	JOptionPane.showMessageDialog(logPanel3, "Empty value");
+                } else if ((birthText.getText().length()) != 6) {
+                	JOptionPane.showMessageDialog(logPanel3, "Invalid birth date");
+                } else {
+                	if(!pnumText.getText().isEmpty() && !homeText.getText().isEmpty()) {
+                	sql = "insert into member values ('" + idText.getText() + "','" + pwText.getPassword() + "','"+ nickText.getText() + "','"
+                			+ emailText.getText() + "','"+ nameText.getText() + "','" + birthText.getText() +pnumText.getText() + "','"+ homeText.getText() + "');";
+                	}
+                	else if(!pnumText.getText().isEmpty() && homeText.getText().isEmpty()) {
+                		sql = "insert into member values ('" + idText.getText() + "','" + pwText.getPassword() + "','"+ nickText.getText() + "','"
+                    			+ emailText.getText() + "','"+ nameText.getText() + "','" + birthText.getText() + "','" + pnumText.getText() + "', null);";
+                	}
+                	else if(pnumText.getText().isEmpty() && !homeText.getText().isEmpty()) {
+                		sql = "insert into member values ('" + idText.getText() + "','" + pwText.getPassword() + "','"+ nickText.getText() + "','"
+                    			+ emailText.getText() + "','"+ nameText.getText() + "','" + birthText.getText() + "',null'"+ homeText.getText() + "');";
+                	}else {
+                		sql = "insert into member values ('" + idText.getText() + "','" + pwText.getPassword() + "','"+ nickText.getText() + "','"
+                    			+ emailText.getText() + "','"+ nameText.getText() + "','" + birthText.getText()+"' ,null,null);";
+                	}
+                	stmt.executeUpdate(sql);
 					JOptionPane.showMessageDialog(logPanel3, "Joined!");
 					frame.dispose();
 					dbClose();
-				}
-			}
-		
+                }
+            }
+
+
 		}catch(Exception ee) {
 			System.out.println("Error");
 			ee.printStackTrace();
