@@ -1,0 +1,5 @@
+객체를 생성하고 pick_color(String s)에 스트링을 넣으면 int[3]을 반환해줍니다.
+int[0] = R
+int[1] = G
+int[2] = B
+그 다음 java.awt.Color(R,G,B)를 하면 색상이 추가됩니다.
