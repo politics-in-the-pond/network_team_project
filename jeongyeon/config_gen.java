@@ -14,7 +14,7 @@ public class config_gen {
 	    try{
 	        File file = new File("./src/my_package/config.dat");
 	        FileOutputStream out = new FileOutputStream(file);
-		    bytes[0]=(byte)((port&0xFF000000)>>24);
+		bytes[0]=(byte)((port&0xFF000000)>>24);
 	        bytes[1]=(byte)((port&0x00FF0000)>>16);
 	        bytes[2]=(byte)((port&0x0000FF00)>>8);
 	        bytes[3]=(byte) (port&0x000000FF);
