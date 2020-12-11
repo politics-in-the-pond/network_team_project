@@ -84,21 +84,21 @@ public class String_crypto {
 		
 		//여기부터**********************************************************************************
 		//System.out.println("_________________________________________________________________"); 
-		System.out.println("원본 :");
+		//System.out.println("원본 :");
 		
-		String s1 = new String(buffer);
+		//String s1 = new String(buffer);
 		//String s2 = test(check_sum);
 		//String s3 = test(key);
 		//String s4 = test(IV);
-		String s5 = new String(send);
+		//String s5 = new String(send);
 		
-		System.out.println(s1);
+		//System.out.println(s1);
 		//System.out.println("체크섬 : " + s2 );
 		//System.out.println("AES_KEY : " + s3 );
 		//System.out.println("초기화벡터 : " + s4 );
 		//System.out.println("결과물 : " + test(send));
-		System.out.println("암호화된 문장 :");
-		System.out.println(s5);
+		//System.out.println("암호화된 문장 :");
+		//System.out.println(s5);
 		//여기까지 테스트용****************************************************************************
 		
 		return send;
@@ -165,20 +165,20 @@ public class String_crypto {
 		check_sum_Contrast = checksum(result);
 		
 		//여기부터**********************************************************************************
-		System.out.println("복호화 결과 :"); 
+		//System.out.println("복호화 결과 :"); 
 		
-		String s1 = new String(result);
+		//String s1 = new String(result);
 		//String s2 = test(check_sum);
 		//String s3 = test(check_sum_Contrast);
 		//String s4 = test(key);
 		//String s5 = test(IV);
 
-		System.out.println(s1);
+		//System.out.println(s1);
 		//System.out.println("체크섬 : " + s2 );
 		//System.out.println("대조용 체크섬 : " + s3 );
 		//System.out.println("AES_KEY : " + s4 );
 		//System.out.println("초기화벡터 : " + s5 );	
-		System.out.println("___________________________________________________________________"); 
+		//System.out.println("___________________________________________________________________"); 
 		//여기까지 테스트용****************************************************************************
 
 		if(!Arrays.equals(check_sum, check_sum_Contrast)) { //해시값 다를경우 (메시지가 변조되었을 경우)
@@ -190,38 +190,7 @@ public class String_crypto {
 		return send;
 	}
 	
-/*
-   Copyright (C) 1997 - 2002, Makoto Matsumoto and Takuji Nishimura,
-   All rights reserved.
-
-   Redistribution and use in source and binary forms, with or without
-   modification, are permitted provided that the following conditions
-   are met:
-
-     1. Redistributions of source code must retain the above copyright
-        notice, this list of conditions and the following disclaimer.
-
-     2. Redistributions in binary form must reproduce the above copyright
-        notice, this list of conditions and the following disclaimer in the
-        documentation and/or other materials provided with the distribution.
-
-     3. The names of its contributors may not be used to endorse or promote
-        products derived from this software without specific prior written
-        permission.
-
-   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
-   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
-	private byte[] MT19937(byte[] seed) { //메르센 트위스터 구현부. unsigned형이 없어 원본의 MT19937과는 결과값이 다를 수도 있을 것으로 예상. 난수생성에는 문제 없는듯함.
+	private byte[] MT19937(byte[] seed) { //메르센 트위스터 구현부. unsigned형이 없어 원본의 MT19937과는 결과값이 다를 수도 있을 것으로 예상.
 		
 		long mt[] = new long[N];
 		int mti=N+1;
@@ -270,6 +239,51 @@ public class String_crypto {
 		return (byte[]) result;
 	}
 	
+	public long MT19937_long(int seed) { //메르센 트위스터 구현부. unsigned형이 없어 원본의 MT19937과는 결과값이 다를 수도 있을 것으로 예상.
+		
+		long mt[] = new long[N];
+		int mti=N+1;
+		
+		int s = seed;
+		mt[0] = s & 0xFFFFFFFF;
+		for(mti=1;mti<N;mti++) {
+			mt[mti] = (0x6C078965 * (mt[mti-1] ^ ( mt[mti-1] >> 30 )) + mti);
+		}
+		
+		long y;
+		long mag01[] = new long[2];
+		mag01[0] = 0x0L;
+		mag01[1] = MATRIX_A;
+		
+		if(mti>=N) {
+			int kk;
+			
+			for(kk=0;kk<N-M;kk++) {
+				y = (mt[kk] & UMASK) | (mt[kk+1] & LMASK);
+				mt[kk] = mt[kk+M] ^ (y >> 1) ^ mag01[(int) (y & 0x1L)];
+			}
+			
+			for(;kk<N-1;kk++) {
+				y = (mt[kk] & UMASK) | (mt[kk+1] & LMASK);
+				mt[kk] = mt[kk+(M-N)] ^ (y >> 1) ^ mag01[(int) (y & 0x1L)];
+			}
+			
+			y = (mt[N-1] & UMASK) | (mt[0] & LMASK);
+			mt[N-1] = mt[M-1] ^ (y >> 1) ^ mag01[(int) (y & 0x1L)];
+			
+			mti=0;
+		}
+		
+		y = mt[mti++];
+		
+		y ^= (y >> 11);
+		y ^= (y >> 7) & 0x9D2C6780L;
+		y ^= (y >> 15) & 0xEFC60000L;
+		y ^= (y >> 18);
+		
+		return y;
+	}
+	
 	private byte[] checksum(byte[] message_bin){
 		try {
 			MessageDigest md = MessageDigest.getInstance("SHA-1");
@@ -292,8 +306,14 @@ public class String_crypto {
 		return s3;
 	}
 	
-	private int btoi(byte[] arr){
+	public int btoi(byte[] arr){
 		return (arr[0] & 0xff)<<24 | (arr[1] & 0xff)<<16 | (arr[2] & 0xff)<<8 | (arr[3] & 0xff); 
+	}
+	
+	public byte[] ltob(long x) {
+	    ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
+	    buffer.putLong(x);
+	    return buffer.array();
 	}
 	
 	public byte[] do_encrypt(String s){
@@ -304,4 +324,5 @@ public class String_crypto {
 		return this.decrypt(b);
 	}
 
+	
 }
