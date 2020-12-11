@@ -56,8 +56,8 @@ public class ChatClient {
             	//샘플코드
             	output[0] = 0x02;
             	System.arraycopy(temp, 0, output, 17, temp.length);
-            	System.arraycopy(crypt.ltob(126321621), 0, output, 1, 8);
-            	System.arraycopy(crypt.ltob(1111), 0, output, 9, 8);
+            	System.arraycopy(crypt.ltob(crypt.MT19937_long(126321621)), 0, output, 1, 8);
+            	System.arraycopy(crypt.ltob(crypt.MT19937_long(12123123)), 0, output, 9, 8);
 				out.write(output);
 				out.flush();
 			} catch (IOException e1) {
