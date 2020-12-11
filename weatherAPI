@@ -1,17 +1,27 @@
+/*
+ @author 201935006 고효진
+ @HW3
+ **/
+
+import java.awt.event.*;
+import javax.swing.*;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+
 import java.io.BufferedReader;
 import java.io.IOException;
-public class weatherAPI{
-	public static void main(String[] args) throws IOException, ParseException{
+public class weatherAPI extends JFrame{
+	
+	public weatherAPI() throws IOException, ParseException{
 		
 		String serviceKey = "WdoDhkmlcQ%2FO2oKSAGprlgcCkJnlvpQz%2FuvdC%2Fo9ezvRrg05%2Fd2pfzBOBdO1TMkxn49SnDXfyCKucyqt9OrPnA%3D%3D";
 		//홈페이지에서 받은 API key
@@ -65,12 +75,25 @@ public class weatherAPI{
 		JSONObject weather;
 		String day = "";
 		String time = "";
+//		String categoryArr[] = null;
+//		String fcstValueArr[] = null;
+//		String fcstDateArr[] = null;
+//		String fcstTimeArr[]= null;
+		ArrayList<String> catList = new ArrayList();
+		ArrayList<String> fcValList = new ArrayList();
+		ArrayList<String> fcDateList = new ArrayList();
+		ArrayList<String> fcTimeList = new ArrayList();
+
 		for(int i = 0;i < parse_item.size(); i++) {
 			weather = (JSONObject)parse_item.get(i);
 			Object fcstValue = weather.get("fcstValue");
 			Object fcstDate = weather.get("fcstDate");
 			Object fcstTime = weather.get("fcstTime");
 			category = (String)weather.get("category");
+			catList.add(category);
+			fcValList.add(fcstValue.toString());
+			fcDateList.add(fcstDate.toString());
+			fcTimeList.add(fcstTime.toString());
 			//category, fcstValue, fcstDate, fcstTime과 같은 값 받아오기  
 			if(!day.equals(fcstDate.toString())) {
 				day = fcstDate.toString();
@@ -79,12 +102,40 @@ public class weatherAPI{
 				time = fcstTime.toString();
 				System.out.println(day + " " + time);
 			}
+//			System.out.print("\tcategory :" + category);
+//			result1 += category;
+//			System.out.print(", fcst_Value : "+ fcstValue);
+//			result1 += fcstValue;
+//			System.out.print(", fcstDate : " + fcstDate);
+//			result1 += fcstDate;
+//			System.out.println(", fcstTime : " + fcstTime);
+//			result1 += fcstTime;
+
+			String printResult = "";
+			for(i = 0 ;i < catList.size();i++) {
+				printResult += "category : " + catList.get(i) + " fcstValue: " + fcValList.get(i) + "fcstDate : " + fcDateList.get(i) + "fcstTime: " + fcTimeList.get(i) + "\n";
+			}
+			System.out.println(printResult);
 			
-			System.out.print("\tcategory :" + category);
-			System.out.print(", fcst_Value : "+ fcstValue);
-			System.out.print(", fcstDate : " + fcstDate);
-			System.out.println(", \nfcstTime : " + fcstTime);
+			JFrame frame = new JFrame();
+			JPanel weatherPanel = new JPanel();
+			JLabel resultLabel = new JLabel(printResult);
+
+			JList l = new JList(printResult.split("\n"));
+			weatherPanel.add(l);
+//			weatherPanel.add(resultLabel);
+			add(weatherPanel);
+			setVisible(true);
+			setSize(500,300);
+			setLocationRelativeTo(null);
+			setResizable(false);
+			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			
 			//출력  
 		}
 	}
+	public static void main(String[] args) throws IOException, ParseException {
+		new weatherAPI();
+	}
+
 }
