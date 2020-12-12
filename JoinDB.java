@@ -11,14 +11,14 @@ public class JoinDB implements MouseListener {
 	JPanel logPanel3;
 	JTextField idText,nameText, birthText, nickText, emailText, pnumText, homeText = null;
 	JPasswordField pwText, pwCheckText = null;
-	JButton joinBtn, checkBtn;
+	JButton joinBtn, checkBtn, checkNickBtn;
 	void JoinDBPanel() {
 		frame = new JFrame("Join");
 		logPanel = new JPanel();
 		logPanel1 =  new JPanel(new GridLayout(9,1));
 		logPanel2 = new JPanel(new GridLayout(9,1));
-		logPanel3 = new JPanel();
-		
+		logPanel3 = new JPanel(new GridLayout(2,1));
+
 		JLabel idLabel = new JLabel("ID", JLabel.CENTER);
 		JLabel pwLabel = new JLabel("PW", JLabel.CENTER);
 		JLabel pwCheckLabel = new JLabel("Check PW", JLabel.CENTER);
@@ -69,14 +69,19 @@ public class JoinDB implements MouseListener {
 		logPanel2.add(homeText);
 		
 		checkBtn = new JButton("Check ID");
-		logPanel3.add(checkBtn, BorderLayout.NORTH);
+		logPanel3.add(checkBtn, BorderLayout.EAST);
 		checkBtn.addMouseListener(this);
+		
+		checkNickBtn = new JButton("Check Nickname");
+		logPanel3.add(checkNickBtn,BorderLayout.EAST);
+		checkNickBtn.addMouseListener(this);
 		
 		frame.add(logPanel,BorderLayout.NORTH);
 		frame.add(logPanel1,BorderLayout.WEST);
 		frame.add(logPanel2, BorderLayout.CENTER);
 		frame.add(logPanel3, BorderLayout.EAST);
-		
+		logPanel3.setPreferredSize(new Dimension(100, 50));
+
 		JPanel logPanel4 = new JPanel();
 		JLabel askLabel = new JLabel("Join?");
 		joinBtn = new JButton("YES");
@@ -96,7 +101,7 @@ public class JoinDB implements MouseListener {
 			}
 		});
 		
-		frame.setBounds(450,250,350,200);
+		frame.setBounds(450,250,500,500);
 		frame.setResizable(false);
 		frame.setVisible(true);
 		
@@ -148,6 +153,15 @@ public class JoinDB implements MouseListener {
                 	JOptionPane.showMessageDialog(logPanel3, "Available ID");                }
             }
  
+			if (e.getSource().equals(checkNickBtn)) {
+                sql = "select * from member where nickname='" + nickText.getText() + "'";
+                rs = stmt.executeQuery(sql); // 읽어오는거라 다르다 비교해//리턴타입이 ResultSet
+ 
+                if (rs.next() == true || (nickText.getText().isEmpty()) == true) { // 이미 id가 존재한다면
+                	JOptionPane.showMessageDialog(logPanel3, "Unavailable Nickname");                } 
+                else {
+                	JOptionPane.showMessageDialog(logPanel3, "Available Nickname");                }
+            }
             // 가입 버튼
             if (e.getSource().equals(joinBtn)) {
                 sql = "select * from member where id='" + idText.getText() + "'";
