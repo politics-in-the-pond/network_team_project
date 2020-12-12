@@ -28,9 +28,12 @@ public class FriendList extends JFrame{
 	JPanel panel2;
 	JPanel panel3;
 	JTree tree;
+	JButton logoutBtn;
+	JButton secessionBtn;
 	Statement stmt = null;
 	ResultSet rs = null;
 	ResultSet rs2 = null;
+	ResultSet rs3 = null;
 	String url = "jdbc:mysql://localhost/users?serverTimezone=UTC&useSSL=false&&allowPublicKeyRetrieval=true&useSSL=false";
 	String sql = null;
 	String sql2 = null;
@@ -41,13 +44,16 @@ public class FriendList extends JFrame{
 	public void FriendListPanel(String id) throws IOException, ParseException {
 		frame = new JFrame("WaitRoom");
 		panel = new JPanel();
-		panel1 = new JPanel();
+		panel1 = new JPanel(new GridLayout(5,1));
 		panel2 = new JPanel();
 		panel3 = new JPanel();
-	
+		logoutBtn = new JButton("Logout");
+		secessionBtn = new JButton("secession ");
 		String userName = null;
 		String userNick = null;
 		String userHome = null;
+		panel1.add(logoutBtn, BorderLayout.WEST);
+		panel1.add(secessionBtn,BorderLayout.EAST);
 		ArrayList<Object> friendData = new ArrayList();
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -67,12 +73,39 @@ public class FriendList extends JFrame{
 			while(rs2.next()) {
 				friendData.add(rs2.getString("name"));
 			}
+			secessionBtn.addMouseListener(new MouseAdapter(){
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					String secessSql = "delete member where id='" + id + "'";
+					try {
+						stmt.executeUpdate(secessSql);
+						rs3 = stmt.executeQuery(secessSql);
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					frame.dispose();
+					
+				}
+
+				
+			});
+			logoutBtn.addMouseListener(new MouseAdapter(){
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					frame.dispose();
+					
+				}
+
+				
+			});
+			
 		}catch(Exception e) {
 			System.out.println("Error");
 			e.printStackTrace();
 		}
 		
-		JLabel userNamePanel = new JLabel("Name :" + userName,JLabel.CENTER);
+		JLabel userNamePanel = new JLabel("Name :" + userName ,JLabel.CENTER);
 		panel1.add(userNamePanel);
 		JLabel userNickPanel = new JLabel("Nickname :"+ userNick,JLabel.CENTER);
 		panel1.add(userNickPanel);
@@ -259,4 +292,3 @@ public class FriendList extends JFrame{
 
 
 	}
-
