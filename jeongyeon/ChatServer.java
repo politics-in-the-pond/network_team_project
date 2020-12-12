@@ -32,10 +32,10 @@ public class ChatServer {
         byte[] ipaddress = new byte[50];
         byte[] portb = new byte[4];
         try{
-	       File file = new File("./src/my_package/config.dat");
-	       FileInputStream inb = new FileInputStream(file);
-		   inb.read(reads);
-	       inb.close();
+	       	File file = new File("./src/my_package/config.dat");
+	       	FileInputStream inb = new FileInputStream(file);
+		inb.read(reads);
+	  	inb.close();
 	    }catch(Exception e){
 	        e.printStackTrace(System.out);
 	    }
@@ -57,8 +57,8 @@ public class ChatServer {
 		private Socket socket;
 		private InputStream is;
 		private DataInputStream in;
-	    OutputStream os;
-	    DataOutputStream out;
+		OutputStream os;
+		DataOutputStream out;
 		String_crypto crypt = new String_crypto();
 
 		public Handler(Socket socket) {
@@ -72,8 +72,8 @@ public class ChatServer {
 			try {
 				is = socket.getInputStream(); //입력
 				in = new DataInputStream(is);
-	            os = socket.getOutputStream();
-	            out = new DataOutputStream(os);
+	          		  os = socket.getOutputStream();
+	         		   out = new DataOutputStream(os);
 				while (true) {
 					out.write(crypt.do_encrypt("LOGIN")); //서버가 열려있음
 					out.flush();
