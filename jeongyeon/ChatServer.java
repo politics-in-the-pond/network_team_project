@@ -132,9 +132,35 @@ public class ChatServer {
 					if (type == 0x02) {
 						String input_str = crypt.do_decrypt(input);
 						System.out.println(input_str);
+						byte[] output = new byte[how_many];
+						System.arraycopy(temp, 0, output, 0, how_many);
+						for (member mb : members) {
+							mb.getWriter().write(output);
+							mb.getWriter().flush();
+						}
 					}
 					if (type == 0x03) {
-
+						System.out.println(how_many);
+						byte[] number = new byte[4];
+						byte[] header = new byte[21];
+						int block_num = 0;
+						System.arraycopy(temp, 17, number, 0, 4);
+						System.arraycopy(temp, 0, header, 0, 21);
+						for (member mb : members) {
+							mb.getWriter().write(header);
+							mb.getWriter().flush();
+						}
+						block_num = crypt.btoi(number);
+						for (int i = 0; i <= block_num; i++) {
+							how_many = in.read(temp);
+							System.out.println(how_many);
+							byte[] output = new byte[how_many];
+							System.arraycopy(temp, 0, output, 0, how_many);
+							for (member mb : members) {
+								mb.getWriter().write(output);
+								mb.getWriter().flush();
+							}
+						}
 					}
 					String tmpchatroomid = null;
 
@@ -145,12 +171,6 @@ public class ChatServer {
 					 * +"$"+cr.getRoomID())); } } }
 					 */
 
-					byte[] output = new byte[how_many];
-					System.arraycopy(temp, 0, output, 0, how_many);
-					for (member mb : members) {
-						mb.getWriter().write(output);
-						mb.getWriter().flush();
-					}
 				}
 			} catch (Exception e) {
 				System.out.println(e);
