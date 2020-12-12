@@ -183,22 +183,40 @@ public class FriendList extends JFrame{
 		DefaultMutableTreeNode online = new DefaultMutableTreeNode("접속중인 친구");
 		DefaultMutableTreeNode offline = new DefaultMutableTreeNode("비접속중인 친구");
 		
-		DefaultMutableTreeNode f1 = new DefaultMutableTreeNode("고라파덕");
+		
+		ArrayList<DefaultMutableTreeNode> f = new ArrayList<DefaultMutableTreeNode>();
+		
+		for (int i = 0; i< friendData.size(); i++) {
+			DefaultMutableTreeNode node = new DefaultMutableTreeNode(friendData.get(i));
+			System.out.println(node);
+			f.add(node);
+		}
+		/*
+		System.out.println(f.size());
+		for (int i = 0; i < f.size(); i++) {
+			System.out.println(f.get(i));
+		}
+		*/
+		/*DefaultMutableTreeNode f1 = new DefaultMutableTreeNode(friendData.get(1));
 		DefaultMutableTreeNode f2 = new DefaultMutableTreeNode("B");
 		DefaultMutableTreeNode f3 = new DefaultMutableTreeNode("C");
 		DefaultMutableTreeNode f4 = new DefaultMutableTreeNode("D");
 		DefaultMutableTreeNode f5 = new DefaultMutableTreeNode("E");
-		
+		*/
 		root.add(online);
 		root.add(offline);
 		
+		for (int i = 0; i < f.size(); i++) {
+			online.add(f.get(i));
+		}
+		/*
 		online.add(f1); //이 코드를 이용해 친구의 온,오프라인 확인
 		online.add(f2);
 		online.add(f3);
 		
 		offline.add(f4);
 		offline.add(f5);
-		
+		*/
 		tree = new JTree(root);
 		
 		tree.expandRow(1);
@@ -225,6 +243,18 @@ public class FriendList extends JFrame{
 		frame.setResizable(false);
 		frame.setVisible(true);
 		
+	}
+
+
+	private MutableTreeNode f(int i) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	private DefaultMutableTreeNode DefaultMutableTreeNode(Object object) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 
