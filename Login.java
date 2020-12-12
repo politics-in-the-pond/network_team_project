@@ -2,8 +2,10 @@ import java.awt.event.*;
 import javax.swing.*;
 
 public class Login extends JFrame{
+	public static String id = null;
 	JoinDB jdb;
 	LoginDB ljdb;
+	FriendList fList;
 	public Login() {
 		JPanel panel = new JPanel();
 		JLabel idLabel = new JLabel("ID");
@@ -30,15 +32,18 @@ public class Login extends JFrame{
 
 			}
 		});
+		
 		logBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				ljdb = new LoginDB();
-				String id = idText.getText();
+				id = idText.getText();
 				String pw = new String(pwText.getPassword());
 				int result = ljdb.checkIDPW(id,pw);
 				if(result == 0) {
 					JOptionPane.showMessageDialog(null,"Logged in");
+					fList = new FriendList();
+					fList.FriendListPanel(id);
 				}
 				else
 					JOptionPane.showMessageDialog(null,"Fail");
