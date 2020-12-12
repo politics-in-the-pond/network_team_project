@@ -30,6 +30,7 @@ public class FriendList extends JFrame{
 	JTree tree;
 	JButton logoutBtn;
 	JButton secessionBtn;
+	JButton chatBtn;
 	Statement stmt = null;
 	ResultSet rs = null;
 	ResultSet rs2 = null;
@@ -45,7 +46,6 @@ public class FriendList extends JFrame{
 		frame = new JFrame("WaitRoom");
 		panel = new JPanel();
 		panel1 = new JPanel(new GridLayout(5,1));
-		panel2 = new JPanel();
 		panel3 = new JPanel();
 		logoutBtn = new JButton("Logout");
 		secessionBtn = new JButton("secession ");
@@ -218,24 +218,16 @@ public class FriendList extends JFrame{
 		
 		
 		ArrayList<DefaultMutableTreeNode> f = new ArrayList<DefaultMutableTreeNode>();
-		
+
 		for (int i = 0; i< friendData.size(); i++) {
-			DefaultMutableTreeNode node = new DefaultMutableTreeNode(friendData.get(i));
-			System.out.println(node);
-			f.add(node);
+			System.out.println("<"+userName + "> <" +friendData.get(i).toString()+">");
+			if(userName.compareTo(friendData.get(i).toString())!=0) {				
+				DefaultMutableTreeNode node = new DefaultMutableTreeNode(friendData.get(i));
+				System.out.println(node);
+				f.add(node);
+				}
 		}
-		/*
-		System.out.println(f.size());
-		for (int i = 0; i < f.size(); i++) {
-			System.out.println(f.get(i));
-		}
-		*/
-		/*DefaultMutableTreeNode f1 = new DefaultMutableTreeNode(friendData.get(1));
-		DefaultMutableTreeNode f2 = new DefaultMutableTreeNode("B");
-		DefaultMutableTreeNode f3 = new DefaultMutableTreeNode("C");
-		DefaultMutableTreeNode f4 = new DefaultMutableTreeNode("D");
-		DefaultMutableTreeNode f5 = new DefaultMutableTreeNode("E");
-		*/
+		
 		root.add(online);
 		root.add(offline);
 		
@@ -254,7 +246,7 @@ public class FriendList extends JFrame{
 		
 		tree.expandRow(1);
 		tree.expandRow(5);
-		tree.setRowHeight(50);
+		//tree.setRowHeight(50);
 		
 		DefaultTreeCellRenderer dt = new DefaultTreeCellRenderer();
 		dt.setOpenIcon(new ImageIcon("C:\\Users\\jeonj\\Desktop\\TermProject\\Open.gif"));
@@ -264,13 +256,37 @@ public class FriendList extends JFrame{
 		tree.setCellRenderer(dt);
 		
 		JScrollPane js = new JScrollPane(tree);
-		//add("Center",js);
+		
+		chatBtn = new JButton("Make chatroom");
+		try {
+			chatBtn.addMouseListener(new MouseAdapter(){
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					System.out.println("Enter Chat Room!");
+					//
+					//For multiple selection you can use
+					TreePath[] treePaths = tree.getSelectionModel().getSelectionPaths();
+					for (TreePath treePath : treePaths) {
+					     DefaultMutableTreeNode selectedElement = (DefaultMutableTreeNode)treePath.getLastPathComponent();
+					     Object userObject = selectedElement.getUserObject(); 
+					     //Do what you want with selected element's user object
+					     System.out.println(userObject);
+					}
+				}				
+			});
 			
+		}catch(Exception e) {
+			System.out.println("Error");
+			e.printStackTrace();
+		}
+		
+		
 		//전종민 끝
 		
   
 		frame.add(panel1,BorderLayout.NORTH);
 		frame.add(js,BorderLayout.CENTER);
+		frame.add(chatBtn, BorderLayout.EAST);
 		frame.add(panel3,BorderLayout.SOUTH);
 		frame.setBounds(450,250,800,900);
 		frame.setResizable(false);
