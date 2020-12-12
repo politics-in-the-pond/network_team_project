@@ -147,6 +147,7 @@ public class ChatClient {
 						login_comp = true;
 					}
 				} else {
+					if((how_many-37)%16!=0) continue;
 					byte[] input = new byte[how_many - 17];
 					System.arraycopy(temp, 17, input, 0, how_many - 17);
 					type = temp[0]; // type 00 = 공백, 01 = 설정&쿼리, 02 = 메시지, 03 = 파일
