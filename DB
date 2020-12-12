@@ -1,3 +1,7 @@
 create database users;
 use users;
+<<<<<<< HEAD
 create table member(id varchar(20) primary key, nickname varchar(20), name varchar(20), pw varchar(20), birthDate varchar(6), email varchar(50), pnumber varchar(11), home varchar(100));
+=======
+create table member(id varchar(20) primary key not null, pw varchar(20) not null, nickname varchar(20) not null, email varchar(50), name varchar(20) not null, birth int(6) not null, pnum int(11), home varchar(50));
+>>>>>>> 8873c58d4a4880f0b2c43d57a4e7d3026475557c
