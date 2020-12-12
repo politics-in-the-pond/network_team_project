@@ -104,6 +104,87 @@ public class String_crypto {
 		return send;
 	}
 	
+	private byte[] fencrypt(byte[] buffer){
+		byte[] check_sum = new byte[20];
+		
+		check_sum = checksum(buffer);
+				
+		byte seed1[] = new byte[4];
+		byte seed2[] = new byte[4];
+		byte seed3[] = new byte[4];
+		byte seed4[] = new byte[4];
+		
+		System.arraycopy(check_sum, 0, seed1, 0, 4); //체크섬기반으로 시드생성
+		System.arraycopy(check_sum, 4, seed2, 0, 4);
+		System.arraycopy(check_sum, 8, seed3, 0, 4);
+		System.arraycopy(check_sum, 12, seed4, 0, 4);
+		
+		byte key[] = new byte[16];
+		byte IV[] = new byte[16];
+		byte tempkey[] = new byte[4];
+		
+		tempkey = MT19937(seed1); //key와 초기화벡터 생성
+		System.arraycopy(tempkey, 0, key, 0, 4);
+		System.arraycopy(tempkey, 4, IV, 0, 4);
+		tempkey = MT19937(seed2);
+		System.arraycopy(tempkey, 0, key, 4, 4);
+		System.arraycopy(tempkey, 4, IV, 4, 4);
+		tempkey = MT19937(seed3);
+		System.arraycopy(tempkey, 0, key, 8, 4);
+		System.arraycopy(tempkey, 4, IV, 8, 4);
+		tempkey = MT19937(seed4);
+		System.arraycopy(tempkey, 0, key, 12, 4);
+		System.arraycopy(tempkey, 4, IV, 12, 4);
+		
+		//AES128 암호화 실행 key = key[]
+		Key AES_key = new SecretKeySpec(key,"AES");
+		Cipher AES;
+		byte[] result = null;
+		
+		try {
+			AES = Cipher.getInstance("AES/CBC/PKCS5Padding");
+			AES.init(Cipher.ENCRYPT_MODE, AES_key, new IvParameterSpec(IV));
+			result = AES.doFinal(buffer);
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		} catch (NoSuchPaddingException e) {
+			e.printStackTrace();
+		} catch (InvalidKeyException e) {
+			e.printStackTrace();
+		} catch (InvalidAlgorithmParameterException e) {
+			e.printStackTrace();
+		} catch (IllegalBlockSizeException e) {
+			e.printStackTrace();
+		} catch (BadPaddingException e) {
+			e.printStackTrace();
+		}
+		
+		byte[] send = new byte[result.length + 20];
+		System.arraycopy(result, 0, send, 0, result.length);
+		System.arraycopy(check_sum, 0, send, result.length, 20);
+		
+		//여기부터**********************************************************************************
+		//System.out.println("_________________________________________________________________"); 
+		//System.out.println("원본 :");
+		
+		//String s1 = new String(buffer);
+		//String s2 = test(check_sum);
+		//String s3 = test(key);
+		//String s4 = test(IV);
+		//String s5 = new String(send);
+		
+		//System.out.println(s1);
+		//System.out.println("체크섬 : " + s2 );
+		//System.out.println("AES_KEY : " + s3 );
+		//System.out.println("초기화벡터 : " + s4 );
+		//System.out.println("결과물 : " + test(send));
+		//System.out.println("암호화된 문장 :");
+		//System.out.println(s5);
+		//여기까지 테스트용****************************************************************************
+		
+		return send;
+	}
+	
 	private String decrypt(byte[] b) {
 		byte[] check_sum = new byte[20];
 		byte[] check_sum_Contrast = new byte[20];
@@ -188,6 +269,90 @@ public class String_crypto {
 		String send = new String(result);
 		
 		return send;
+	}
+	
+	private byte[] fdecrypt(byte[] b) {
+		byte[] check_sum = new byte[20];
+		byte[] check_sum_Contrast = new byte[20];
+		byte[] s = new byte[b.length-20];
+		
+		byte seed1[] = new byte[4];
+		byte seed2[] = new byte[4];
+		byte seed3[] = new byte[4];
+		byte seed4[] = new byte[4];
+		
+		System.arraycopy(b, b.length-20, check_sum, 0, 20); //체크섬과 문장분리
+		System.arraycopy(b, 0, s, 0, b.length-20);
+		
+		System.arraycopy(check_sum, 0, seed1, 0, 4); //체크섬기반으로 시드생성
+		System.arraycopy(check_sum, 4, seed2, 0, 4);
+		System.arraycopy(check_sum, 8, seed3, 0, 4);
+		System.arraycopy(check_sum, 12, seed4, 0, 4);
+		
+		byte key[] = new byte[16];
+		byte IV[] = new byte[16];
+		byte tempkey[] = new byte[4];
+		
+		tempkey = MT19937(seed1); //key와 초기화벡터 생성
+		System.arraycopy(tempkey, 0, key, 0, 4);
+		System.arraycopy(tempkey, 4, IV, 0, 4);
+		tempkey = MT19937(seed2);
+		System.arraycopy(tempkey, 0, key, 4, 4);
+		System.arraycopy(tempkey, 4, IV, 4, 4);
+		tempkey = MT19937(seed3);
+		System.arraycopy(tempkey, 0, key, 8, 4);
+		System.arraycopy(tempkey, 4, IV, 8, 4);
+		tempkey = MT19937(seed4);
+		System.arraycopy(tempkey, 0, key, 12, 4);
+		System.arraycopy(tempkey, 4, IV, 12, 4);
+	
+		//AES128 복호화 실행 key = key[]
+		Key AES_key = new SecretKeySpec(key,"AES");
+		Cipher AES;
+		byte[] result = null;
+		
+		try {
+			AES = Cipher.getInstance("AES/CBC/PKCS5Padding");
+			AES.init(Cipher.DECRYPT_MODE, AES_key, new IvParameterSpec(IV));
+			result = AES.doFinal(s);
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		} catch (NoSuchPaddingException e) {
+			e.printStackTrace();
+		} catch (InvalidKeyException e) {
+			e.printStackTrace();
+		} catch (InvalidAlgorithmParameterException e) {
+			e.printStackTrace();
+		} catch (IllegalBlockSizeException e) {
+			e.printStackTrace();
+		} catch (BadPaddingException e) {
+			e.printStackTrace();
+		}
+		
+		check_sum_Contrast = checksum(result);
+		
+		//여기부터**********************************************************************************
+		//System.out.println("복호화 결과 :"); 
+		
+		//String s1 = new String(result);
+		//String s2 = test(check_sum);
+		//String s3 = test(check_sum_Contrast);
+		//String s4 = test(key);
+		//String s5 = test(IV);
+
+		//System.out.println(s1);
+		//System.out.println("체크섬 : " + s2 );
+		//System.out.println("대조용 체크섬 : " + s3 );
+		//System.out.println("AES_KEY : " + s4 );
+		//System.out.println("초기화벡터 : " + s5 );	
+		//System.out.println("___________________________________________________________________"); 
+		//여기까지 테스트용****************************************************************************
+
+		if(!Arrays.equals(check_sum, check_sum_Contrast)) { //해시값 다를경우 (메시지가 변조되었을 경우)
+			return null;
+		}
+		
+		return result;
 	}
 	
 	private byte[] MT19937(byte[] seed) { //메르센 트위스터 구현부. unsigned형이 없어 원본의 MT19937과는 결과값이 다를 수도 있을 것으로 예상.
@@ -324,5 +489,12 @@ public class String_crypto {
 		return this.decrypt(b);
 	}
 
+	public byte[] do_fencrypt(byte[] b){
+		return this.fencrypt(b);
+	}
+	
+	public byte[] do_fdecrypt(byte[] b){
+		return this.fdecrypt(b);
+	}
 	
 }
