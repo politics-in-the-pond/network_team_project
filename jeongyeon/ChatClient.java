@@ -35,6 +35,7 @@ public class ChatClient {
 	JTextField textField = new JTextField(50);//
 	JButton b = new JButton("file");
 
+	static ChatClient client = null;
 	String serverAddress;
 	int port;
 	private InputStream is;
@@ -78,15 +79,30 @@ public class ChatClient {
 					byte[] file = new byte[length];
 					System.arraycopy(temp, 0, file, 0, length);
 					byte[] enc_file = crypt.do_fencrypt(file);
-					byte[] output = new byte[enc_file.length + 17];
-					System.out.println(enc_file.length);
+
+					byte[] buffer = new byte[131071];
+					byte[] header = new byte[21]; // 타입1/유저8/태칭방8/블록4
+					int block_num = enc_file.length / 131071;
+					int lastblock = enc_file.length % 131071;
+					byte[] last_buffer = new byte[lastblock];
+
+					System.out.println("보내는 파일 바이트" + enc_file.length);
 					System.out.println(length);
 					// 샘플코드
-					output[0] = 0x03;
-					System.arraycopy(enc_file, 0, output, 17, enc_file.length);
-					System.arraycopy(crypt.ltob(crypt.MT19937_long(126321621)), 0, output, 1, 8);
-					System.arraycopy(crypt.ltob(crypt.MT19937_long(12123123)), 0, output, 9, 8);
-					out.write(output);
+					header[0] = 0x03;
+					System.arraycopy(crypt.ltob(crypt.MT19937_long(126321621)), 0, header, 1, 8);
+					System.arraycopy(crypt.ltob(crypt.MT19937_long(12123123)), 0, header, 9, 8);
+					System.arraycopy(crypt.itob(block_num), 0, header, 17, 4);
+					out.write(header);
+					out.flush();
+					int i = 0;
+					for (i = 0; i < block_num; i++) {
+						System.arraycopy(enc_file, 131071 * i, buffer, 0, 131071);
+						out.write(buffer);
+						out.flush();
+					}
+					System.arraycopy(enc_file, 131071 * i, last_buffer, 0, lastblock);
+					out.write(last_buffer);
 					out.flush();
 				} catch (FileNotFoundException e1) {
 					e1.printStackTrace();
@@ -147,12 +163,11 @@ public class ChatClient {
 						login_comp = true;
 					}
 				} else {
-					if((how_many-37)%16!=0) continue;
-					byte[] input = new byte[how_many - 17];
-					System.arraycopy(temp, 17, input, 0, how_many - 17);
 					type = temp[0]; // type 00 = 공백, 01 = 설정&쿼리, 02 = 메시지, 03 = 파일
 
 					if (type == 0x02) {
+						byte[] input = new byte[how_many - 17];
+						System.arraycopy(temp, 17, input, 0, how_many - 17);
 						line = crypt.do_decrypt(input);
 						System.out.println("***" + line);
 					}
@@ -162,7 +177,21 @@ public class ChatClient {
 						FileOutputStream fout = new FileOutputStream(
 								"C:\\Users\\" + user_name + "\\Desktop\\sample.jpg");
 						System.out.println(how_many);
-						byte[] file = crypt.do_fdecrypt(input);
+						byte[] buffer = new byte[131071];
+						byte[] block = new byte[4];
+						System.arraycopy(temp, 17, block, 0, 4);
+						int block_num = crypt.btoi(block);
+						int filesize = 0;
+
+						int i = 0;
+						for (i = 0; i <= block_num; i++) {
+							filesize += in.read(buffer);
+							System.arraycopy(buffer, 0, temp, i * 131071, 131071);
+						}
+						byte[] enc_file = new byte[filesize];
+						System.arraycopy(temp, 0, enc_file, 0, filesize);
+						System.out.println("받은파일 사이즈 " + filesize);
+						byte[] file = crypt.do_fdecrypt(enc_file);
 						fout.write(file);
 						fout.close();
 					}
@@ -184,6 +213,9 @@ public class ChatClient {
 		byte[] portb = new byte[4];
 
 		try {
+			String user_name = System.getProperty("user.name");
+			File filetest = new File("C:\\Users\\" + user_name + "\\Desktop\\config.dat");
+
 			File file = new File("./src/my_package/config.dat");
 			FileInputStream inb = new FileInputStream(file);
 			bytelength = inb.read(reads);
@@ -198,7 +230,7 @@ public class ChatClient {
 
 		port = crypt.btoi(portb);
 		serverAddress = crypt.do_decrypt(ipaddress);
-		ChatClient client = new ChatClient(serverAddress, port); // 클라이언트 객체 생성
+		client = new ChatClient(serverAddress, port); // 클라이언트 객체 생성
 
 		client.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		client.frame.setVisible(true);
