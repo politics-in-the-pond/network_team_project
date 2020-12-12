@@ -1,0 +1,97 @@
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.tree.*;
+import java.sql.*;
+import java.util.*;
+
+
+public class FriendList extends JFrame{
+	JFrame frame;
+	JPanel panel;
+	JPanel panel1;
+	JPanel panel2;
+	JPanel panel3;
+	JTree tree;
+	Statement stmt = null;
+	ResultSet rs = null;
+	ResultSet rs2 = null;
+	String url = "jdbc:mysql://localhost/users?serverTimezone=UTC&useSSL=false&&allowPublicKeyRetrieval=true&useSSL=false";
+	String sql = null;
+	String sql2 = null;
+	Connection conn = null;
+	DefaultMutableTreeNode root = new DefaultMutableTreeNode("친구목록");
+	
+
+	public void FriendListPanel(String id) {
+		frame = new JFrame("WaitRoom");
+		panel = new JPanel();
+		panel1 =  new JPanel();
+		panel2 = new JPanel();
+		panel3 = new JPanel();
+		String userName = null;
+		ArrayList<Object> friendData = new ArrayList();
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			String user = "root", passwd = "000110";
+			conn = DriverManager.getConnection(url, user,passwd);
+			stmt = conn.createStatement();
+			sql = "select * from member where id = '" + id +  "'";
+			rs = stmt.executeQuery(sql);
+			while(rs.next()) {
+				userName = rs.getString("name");
+			}
+			
+			sql2 = "select * from member";
+			rs2 = stmt.executeQuery(sql2);
+			while(rs2.next()) {
+				friendData.add(rs2.getString("name"));
+			}
+		}catch(Exception e) {
+			System.out.println("Error");
+			e.printStackTrace();
+		}
+		JLabel profile = new JLabel("Profile");
+		JLabel userNamePanel = new JLabel(userName);
+		panel1.add(profile);
+		panel1.add(userNamePanel);
+		JTree tree;
+		DefaultMutableTreeNode root = new DefaultMutableTreeNode("친구목록");
+		DefaultMutableTreeNode online = new DefaultMutableTreeNode("접속중인 친구");
+		DefaultMutableTreeNode offline = new DefaultMutableTreeNode("비접속중인 친구");
+		DefaultMutableTreeNode f1 = new DefaultMutableTreeNode("A");
+		DefaultMutableTreeNode f2 = new DefaultMutableTreeNode("B");
+		DefaultMutableTreeNode f3 = new DefaultMutableTreeNode("C");
+		DefaultMutableTreeNode f4 = new DefaultMutableTreeNode("D");
+  
+		add(panel);
+		setVisible(true);
+		setSize(600,800);
+		setLocationRelativeTo(null);
+		setResizable(false);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+	}
+
+//	public static void test() {
+//
+//        // variables
+//        Connection connection = null;
+//    }
+//
+//
+//
+//	public static void main(String[] args) {
+//		try {
+//			String id = "000001";
+//			System.out.println("결과:" + result);
+//
+//
+//			test();
+//
+//			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+//		} catch(Exception ex) {}
+//		new FriendList();
+//	}
+//		
+	}
