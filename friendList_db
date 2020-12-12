@@ -2,10 +2,21 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.tree.*;
+
+
+
+import com.mysql.cj.xdevapi.JsonParser;
+
 import java.sql.*;
+import java.text.ParseException;
 import java.util.*;
 
-
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.io.BufferedReader;
+import java.io.IOException;
 public class FriendList extends JFrame{
 	JFrame frame;
 	JPanel panel;
@@ -20,15 +31,17 @@ public class FriendList extends JFrame{
 	String sql = null;
 	String sql2 = null;
 	Connection conn = null;
+	weatherAPI api;
 	DefaultMutableTreeNode root = new DefaultMutableTreeNode("친구목록");
 	
 
-	public void FriendListPanel(String id) {
+	public void FriendListPanel(String id) throws IOException, ParseException {
 		frame = new JFrame("WaitRoom");
 		panel = new JPanel();
 		panel1 =  new JPanel();
 		panel2 = new JPanel();
 		panel3 = new JPanel();
+	
 		String userName = null;
 		String userNick = null;
 		String userHome = null;
@@ -62,7 +75,10 @@ public class FriendList extends JFrame{
 		panel1.add(userNickPanel);
 		JLabel userHomePanel = new JLabel("Homepage :" + userHome, JLabel.CENTER);
 		panel1.add(userHomePanel);
-
+		
+		api = new weatherAPI();
+		JList l = new JList(api.printResult.split("\n"));
+		panel3.add(l);
 		
 		JTree tree;
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode("친구목록");
@@ -74,32 +90,13 @@ public class FriendList extends JFrame{
 		DefaultMutableTreeNode f4 = new DefaultMutableTreeNode("D");
   
 		frame.add(panel,BorderLayout.NORTH);
-		frame.add(panel1,BorderLayout.WEST);
+		frame.add(panel1,BorderLayout.CENTER);
+		frame.add(panel3,BorderLayout.SOUTH);
 		frame.setBounds(450,250,800,500);
 		frame.setResizable(false);
 		frame.setVisible(true);
 		
 	}
 
-//	public static void test() {
-//
-//        // variables
-//        Connection connection = null;
-//    }
-//
-//
-//
-//	public static void main(String[] args) {
-//		try {
-//			String id = "000001";
-//			System.out.println("결과:" + result);
-//
-//
-//			test();
-//
-//			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-//		} catch(Exception ex) {}
-//		new FriendList();
-//	}
-//		
+
 	}
