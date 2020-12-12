@@ -1,6 +1,8 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.border.LineBorder;
+import javax.swing.border.TitledBorder;
 import javax.swing.tree.*;
 
 import org.json.simple.JSONArray;
@@ -77,6 +79,7 @@ public class FriendList extends JFrame{
 		JLabel userHomePanel = new JLabel("Homepage :" + userHome, JLabel.CENTER);
 		panel1.add(userHomePanel);
 		
+		panel1.setBorder(new TitledBorder(new LineBorder(Color.black,5),"내 프로필  "));
 		String serviceKey = "WdoDhkmlcQ%2FO2oKSAGprlgcCkJnlvpQz%2FuvdC%2Fo9ezvRrg05%2Fd2pfzBOBdO1TMkxn49SnDXfyCKucyqt9OrPnA%3D%3D";
 		//홈페이지에서 받은 API key
 		StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1360000/VilageFcstInfoService/getVilageFcst");
@@ -174,6 +177,7 @@ public class FriendList extends JFrame{
 
 			JList l = new JList(printResult.split("\n"));
 			panel3.add(l);
+			panel3.setBorder(new TitledBorder(new LineBorder(Color.black,5),"동네 날씨 예보 "));
 		
 		JTree tree;
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode("친구목록");
@@ -187,7 +191,7 @@ public class FriendList extends JFrame{
 		frame.add(panel,BorderLayout.NORTH);
 		frame.add(panel1,BorderLayout.CENTER);
 		frame.add(panel3,BorderLayout.SOUTH);
-		frame.setBounds(450,250,800,500);
+		frame.setBounds(450,250,800,900);
 		frame.setResizable(false);
 		frame.setVisible(true);
 		
