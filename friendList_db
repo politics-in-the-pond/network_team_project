@@ -30,6 +30,8 @@ public class FriendList extends JFrame{
 		panel2 = new JPanel();
 		panel3 = new JPanel();
 		String userName = null;
+		String userNick = null;
+		String userHome = null;
 		ArrayList<Object> friendData = new ArrayList();
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -40,6 +42,8 @@ public class FriendList extends JFrame{
 			rs = stmt.executeQuery(sql);
 			while(rs.next()) {
 				userName = rs.getString("name");
+				userNick = rs.getString("nickname");
+				userHome = rs.getString("home");
 			}
 			
 			sql2 = "select * from member";
@@ -51,10 +55,15 @@ public class FriendList extends JFrame{
 			System.out.println("Error");
 			e.printStackTrace();
 		}
-		JLabel profile = new JLabel("Profile");
-		JLabel userNamePanel = new JLabel(userName);
-		panel1.add(profile);
+		
+		JLabel userNamePanel = new JLabel("Name :" + userName,JLabel.CENTER);
 		panel1.add(userNamePanel);
+		JLabel userNickPanel = new JLabel("Nickname :"+ userNick,JLabel.CENTER);
+		panel1.add(userNickPanel);
+		JLabel userHomePanel = new JLabel("Homepage :" + userHome, JLabel.CENTER);
+		panel1.add(userHomePanel);
+
+		
 		JTree tree;
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode("친구목록");
 		DefaultMutableTreeNode online = new DefaultMutableTreeNode("접속중인 친구");
@@ -64,13 +73,12 @@ public class FriendList extends JFrame{
 		DefaultMutableTreeNode f3 = new DefaultMutableTreeNode("C");
 		DefaultMutableTreeNode f4 = new DefaultMutableTreeNode("D");
   
-		add(panel);
-		setVisible(true);
-		setSize(600,800);
-		setLocationRelativeTo(null);
-		setResizable(false);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		frame.add(panel,BorderLayout.NORTH);
+		frame.add(panel1,BorderLayout.WEST);
+		frame.setBounds(450,250,800,500);
+		frame.setResizable(false);
+		frame.setVisible(true);
+		
 	}
 
 //	public static void test() {
