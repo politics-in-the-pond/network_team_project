@@ -1,4 +1,7 @@
 import java.awt.event.*;
+import java.io.IOException;
+import java.text.ParseException;
+
 import javax.swing.*;
 
 public class Login extends JFrame{
@@ -43,7 +46,15 @@ public class Login extends JFrame{
 				if(result == 0) {
 					JOptionPane.showMessageDialog(null,"Logged in");
 					fList = new FriendList();
-					fList.FriendListPanel(id);
+					try {
+						fList.FriendListPanel(id);
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (ParseException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 				else
 					JOptionPane.showMessageDialog(null,"Fail");
