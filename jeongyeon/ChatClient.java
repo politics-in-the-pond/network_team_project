@@ -82,12 +82,12 @@ public class ChatClient {
 					System.out.println(enc_file.length);
 					System.out.println(length);
 	            	//샘플코드
-	            	output[0] = 0x03;
-	            	System.arraycopy(enc_file, 0, output, 17, enc_file.length);
-	            	System.arraycopy(crypt.ltob(crypt.MT19937_long(126321621)), 0, output, 1, 8);
-	            	System.arraycopy(crypt.ltob(crypt.MT19937_long(12123123)), 0, output, 9, 8);
-	            	out.write(output);
-	            	out.flush();
+	            			output[0] = 0x03;
+	            			System.arraycopy(enc_file, 0, output, 17, enc_file.length);
+	            			System.arraycopy(crypt.ltob(crypt.MT19937_long(126321621)), 0, output, 1, 8);
+	            			System.arraycopy(crypt.ltob(crypt.MT19937_long(12123123)), 0, output, 9, 8);
+	            			out.write(output);
+	            			out.flush();
 				} catch (FileNotFoundException e1) {
 					e1.printStackTrace();
 				} catch (IOException e1) {
