@@ -31,19 +31,19 @@ import javax.swing.JTextField;
 public class ChatClient {
 	
 	JFrame frame = new JFrame("Chatter");//
-    JTextField textField = new JTextField(50);//
-    JButton b = new JButton("file");
+	JTextField textField = new JTextField(50);//
+	JButton b = new JButton("file");
 
-    String serverAddress;
-    int port;
+    	String serverAddress;
+    	int port;
 	private InputStream is;
 	private DataInputStream in;
-    OutputStream os;
-    DataOutputStream out;
-    Vector<String> names = new Vector<>();
-    boolean login_comp = false;
+    	OutputStream os;
+    	DataOutputStream out;
+    	Vector<String> names = new Vector<>();
+    	boolean login_comp = false;
     
-    private static File fileOpenDlg() {
+    	private static File fileOpenDlg() {
 		String user_name = System.getProperty("user.name");
 		JFileChooser chooser = new JFileChooser();
 		chooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("일단jpg만 넣어주세요","jpg")); 
@@ -57,17 +57,17 @@ public class ChatClient {
 		return null;
 	}
 
-    public ChatClient(String serverAddress, int port) {
-        this.serverAddress = serverAddress;
-        this.port = port;
-        String_crypto crypt = new String_crypto();
+    	public ChatClient(String serverAddress, int port) {
+       		this.serverAddress = serverAddress;
+        	this.port = port;
+        	String_crypto crypt = new String_crypto();
         
-        textField.setEditable(true);
-        frame.getContentPane().add(textField, BorderLayout.SOUTH);
-        frame.getContentPane().add(b,BorderLayout.NORTH);
-        frame.pack();
+        	textField.setEditable(true);
+        	frame.getContentPane().add(textField, BorderLayout.SOUTH);
+        	frame.getContentPane().add(b,BorderLayout.NORTH);
+        	frame.pack();
         
-        b.addActionListener(new ActionListener(){
+        	b.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				File src = fileOpenDlg();
 				try {
@@ -95,24 +95,24 @@ public class ChatClient {
 				}
 			}});
         
-        textField.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-            try {
-            	byte[] temp = crypt.do_encrypt(textField.getText());
-            	byte[] output = new byte[temp.length+17];
+        	textField.addActionListener(new ActionListener() {
+            		public void actionPerformed(ActionEvent e) {
+           		try {
+            			byte[] temp = crypt.do_encrypt(textField.getText());
+            			byte[] output = new byte[temp.length+17];
             	
-            	//샘플코드
-            	output[0] = 0x02;
-            	System.arraycopy(temp, 0, output, 17, temp.length);
-            	System.arraycopy(crypt.ltob(crypt.MT19937_long(126321621)), 0, output, 1, 8);
-            	System.arraycopy(crypt.ltob(crypt.MT19937_long(12123123)), 0, output, 9, 8);
+            			//샘플코드
+            			output[0] = 0x02;
+            			System.arraycopy(temp, 0, output, 17, temp.length);
+            			System.arraycopy(crypt.ltob(crypt.MT19937_long(126321621)), 0, output, 1, 8);
+            			System.arraycopy(crypt.ltob(crypt.MT19937_long(12123123)), 0, output, 9, 8);
 				out.write(output);
 				out.flush();
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			} //textField에 입력된 내용을 전송한다.
-            textField.setText(""); //textField를 비운다.
-            }});
+            		textField.setText(""); //textField를 비운다.
+            	}});
     }
 
     private void run() throws IOException, ClassNotFoundException {
