@@ -81,7 +81,6 @@ public class ChatServer {
 					if(how_many==0) return;
 					byte[] IDPW = new byte[how_many];
 					System.arraycopy(temp, 0, IDPW, 0, how_many);
-					System.out.println(IDPW);
 					String dec_IDPW = crypt.do_decrypt(IDPW); //ID PW 형식
 					String ID = dec_IDPW.substring(0, dec_IDPW.indexOf(' '));
 					String pw = dec_IDPW.substring(dec_IDPW.indexOf(' ')+1);
@@ -111,10 +110,9 @@ public class ChatServer {
 					me.setWriter(out);
 					me.setNameid(nameID);
 					
-					synchronized (members) {
-						members.add(me);
-						break;
-					}
+					members.add(me);
+					break;
+					
 				}
 				out.write(crypt.do_encrypt("LOGINSUC")); //로그인 성공
 				out.flush();
@@ -125,12 +123,19 @@ public class ChatServer {
 					if(how_many==0) continue;
 					byte[] input = new byte[how_many-17];
 					System.arraycopy(temp, 17, input, 0, how_many-17);
-					type = input[0]; //type 00 = 공백, 01 = 설정&쿼리, 02 = 메시지, 03 = 파일
+					type = temp[0]; //type 00 = 공백, 01 = 설정&쿼리, 02 = 메시지, 03 = 파일
 					long chatroomID;
 					long srcuserID;
 					
-					String input_str = crypt.do_decrypt(input);
+					if(type==0x02) {
+						String input_str = crypt.do_decrypt(input);
+						System.out.println(input_str);
+					}
+					if(type==0x03) {
+						
+					}
 					String tmpchatroomid = null;
+					
 					/* for(chatroom cr : chatrooms) {
 						if(tmpchatroomid.equals(cr.getRoomID())) {
 							for (member mem : cr.room_members) {
@@ -138,7 +143,13 @@ public class ChatServer {
 							}
 						}
 					} */
-					System.out.println(input_str);
+					
+					byte[] output = new byte[how_many];
+					System.arraycopy(temp, 0, output, 0, how_many);
+					for(member mb : members) {
+						mb.getWriter().write(output);
+						mb.getWriter().flush();
+					}
 				}
 			} catch (Exception e) {
 				System.out.println(e);
