@@ -35,10 +35,10 @@ public class ChatServer {
 	       	File file = new File("./src/my_package/config.dat");
 	       	FileInputStream inb = new FileInputStream(file);
 		inb.read(reads);
-	  	inb.close();
-	    }catch(Exception e){
-	        e.printStackTrace(System.out);
-	    }
+		inb.close();
+	}catch(Exception e){
+		e.printStackTrace(System.out);
+	}
         System.arraycopy(reads, 0, portb, 0, 4);
         port = crypt.btoi(portb);
         System.out.println("Server port is : " + port);
@@ -72,8 +72,8 @@ public class ChatServer {
 			try {
 				is = socket.getInputStream(); //입력
 				in = new DataInputStream(is);
-	          		  os = socket.getOutputStream();
-	         		   out = new DataOutputStream(os);
+	          		os = socket.getOutputStream();
+	         		out = new DataOutputStream(os);
 				while (true) {
 					out.write(crypt.do_encrypt("LOGIN")); //서버가 열려있음
 					out.flush();
