@@ -1,11 +1,12 @@
 package my_package;
 
-import java.io.PrintWriter;
+import java.io.DataOutputStream;
 
 public class member {
+	
 	private String name;
 	private String nameid;
-	private PrintWriter writer;
+	private DataOutputStream writer;
 	
 	public String getName() {
 		return name;
@@ -19,10 +20,10 @@ public class member {
 	public void setNameid(String nameid) {
 		this.nameid = nameid;
 	}
-	public PrintWriter getWriter() {
+	public DataOutputStream getWriter() {
 		return writer;
 	}
-	public void setWriter(PrintWriter writer) {
+	public void setWriter(DataOutputStream writer) {
 		this.writer = writer;
 	}
 }
