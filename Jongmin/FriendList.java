@@ -7,13 +7,23 @@ import java.util.*;
 
 
 public class FriendList extends JFrame{
-	JTree tree;
-	DefaultMutableTreeNode root = new DefaultMutableTreeNode("친구목록");
+	public static void main1(String[] args) {
+		Panel Info = new Panel();
+		Panel FriendList = new Panel();
+		Panel Weatherapi = new Panel();
+		
+		Info.setBounds(0, 0, 100, 100);
+		FriendList.setBounds(0, 100, 100, 100);
+		Weatherapi.setBounds(0, 200, 100, 100);
+	}
+	
 	public FriendList() {
+		JTree tree;
+		DefaultMutableTreeNode root = new DefaultMutableTreeNode("친구목록");
 		DefaultMutableTreeNode online = new DefaultMutableTreeNode("접속중인 친구");
 		DefaultMutableTreeNode offline = new DefaultMutableTreeNode("비접속중인 친구");
 		
-		DefaultMutableTreeNode f1 = new DefaultMutableTreeNode("A");
+		DefaultMutableTreeNode f1 = new DefaultMutableTreeNode("고라파덕");
 		DefaultMutableTreeNode f2 = new DefaultMutableTreeNode("B");
 		DefaultMutableTreeNode f3 = new DefaultMutableTreeNode("C");
 		DefaultMutableTreeNode f4 = new DefaultMutableTreeNode("D");
@@ -48,10 +58,6 @@ public class FriendList extends JFrame{
 		setVisible(true);
 		
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		
-	}
-	
-	public static void test() {
 		 
         // variables
         Connection connection = null;
@@ -115,9 +121,6 @@ public class FriendList extends JFrame{
             }
         }
     }
-		
-	
-	
 	public static void main(String[] args) {
 		try {
 			String id = "000001";
@@ -130,12 +133,13 @@ public class FriendList extends JFrame{
 			
 			System.out.println("결과:" + result);
 			
-			
-			test();
-			
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 		} catch(Exception ex) {}
 		new FriendList();
 	}
 
 }
+
+		
+	
+	
