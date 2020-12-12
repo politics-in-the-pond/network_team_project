@@ -71,7 +71,7 @@ public class FriendList extends JFrame{
 			sql2 = "select * from member";
 			rs2 = stmt.executeQuery(sql2);
 			while(rs2.next()) {
-				friendData.add(rs2.getString("name"));
+				friendData.add(rs2.getString("nickname"));
 			}
 			secessionBtn.addMouseListener(new MouseAdapter(){
 				@Override
@@ -221,7 +221,7 @@ public class FriendList extends JFrame{
 
 		for (int i = 0; i< friendData.size(); i++) {
 			System.out.println("<"+userName + "> <" +friendData.get(i).toString()+">");
-			if(userName.compareTo(friendData.get(i).toString())!=0) {				
+			if(userNick.compareTo(friendData.get(i).toString())!=0) {				
 				DefaultMutableTreeNode node = new DefaultMutableTreeNode(friendData.get(i));
 				System.out.println(node);
 				f.add(node);
@@ -232,7 +232,8 @@ public class FriendList extends JFrame{
 		root.add(offline);
 		
 		for (int i = 0; i < f.size(); i++) {
-			online.add(f.get(i));
+			if (i%2 == 0) online.add(f.get(i));
+			else offline.add(f.get(i));
 		}
 		/*
 		online.add(f1); //이 코드를 이용해 친구의 온,오프라인 확인
@@ -267,10 +268,13 @@ public class FriendList extends JFrame{
 					//For multiple selection you can use
 					TreePath[] treePaths = tree.getSelectionModel().getSelectionPaths();
 					for (TreePath treePath : treePaths) {
-					     DefaultMutableTreeNode selectedElement = (DefaultMutableTreeNode)treePath.getLastPathComponent();
-					     Object userObject = selectedElement.getUserObject(); 
-					     //Do what you want with selected element's user object
-					     System.out.println(userObject);
+						
+						DefaultMutableTreeNode selectedElement = (DefaultMutableTreeNode)treePath.getLastPathComponent();
+					    Object userObject = selectedElement.getUserObject(); 
+					    if (friendData.contains(userObject)) {
+						    //Do what you want with selected element's user object
+						    System.out.println(userObject + " is in the list!");
+					    }
 					}
 				}				
 			});
