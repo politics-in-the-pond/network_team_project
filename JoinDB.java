@@ -137,33 +137,6 @@ public class JoinDB implements MouseListener {
 			conn = DriverManager.getConnection(url, info);
 			stmt = conn.createStatement();
 			
-//			if(e.getSource().equals(checkBtn)) {
-//				sql = "select * from member where id = '" + idText.getText() + "'";
-//				rs = stmt.executeQuery(sql);
-//				while(rs.next()) {
-//					if(idText.getText().isEmpty())
-//						JOptionPane.showMessageDialog(logPanel3, "Unavailable ID");
-//					else
-//						JOptionPane.showMessageDialog(logPanel3, "Available ID");
-//					if(rs.next() == true || (idText.getText().isEmpty()) == true || (nameText.getText().isEmpty()) ||(nickText.getText().isEmpty())||(emailText.getText().isEmpty())|| (birthText.getText().isEmpty())) {
-//						JOptionPane.showMessageDialog(logPanel3, "Empty value");
-//		
-//					}else if((birthText.getText().length()) != 6)
-//						JOptionPane.showMessageDialog(logPanel3, "Invalid birth date");
-//					else if(pwText.getPassword() != pwCheckText.getPassword()){
-//						JOptionPane.showMessageDialog(logPanel3, "Passwords do not match");
-//					}
-//					else {
-//						sql = "insert into joinDB values ('" + idText.getText() + "','" + pwText.getText() + "','"
-//								+ nameText.getText() + "','" + birthText.getText() + "')";
-//						stmt.executeUpdate(sql);
-//						JOptionPane.showMessageDialog(logPanel3, "Joined!");
-//						frame.dispose();
-//						dbClose();
-//					}
-//				}
-//				
-//			}
 //		
 			if (e.getSource().equals(checkBtn)) {
                 sql = "select * from member where id='" + idText.getText() + "'";
@@ -188,22 +161,21 @@ public class JoinDB implements MouseListener {
                 	JOptionPane.showMessageDialog(logPanel3, "Empty value");
                 } else if ((birthText.getText().length()) != 6) {
                 	JOptionPane.showMessageDialog(logPanel3, "Invalid birth date");
-                }else {
+                } else {
                 	if(!pnumText.getText().isEmpty() && !homeText.getText().isEmpty()) {
-                	sql = "insert into member values ('" + idText.getText()  + "','"+ nickText.getText() + "','"+ nameText.getText()+ "','" + pwText.getPassword() + "','" + birthText.getText()+ "','"
-                			+ emailText.getText()+"','" + pnumText.getText() + "','"+ homeText.getText() + "');";
+                	sql = "insert into member values ('" + idText.getText() + "','" + pwText.getPassword() + "','"+ nickText.getText() + "','"
+                			+ emailText.getText() + "','"+ nameText.getText() + "','" + birthText.getText() +pnumText.getText() + "','"+ homeText.getText() + "');";
                 	}
                 	else if(!pnumText.getText().isEmpty() && homeText.getText().isEmpty()) {
-                		sql = "insert into member values ('" + idText.getText()+ "','"+ nickText.getText()  + "','"+ nameText.getText()+ "','" + pwText.getPassword() + "','" + birthText.getText() + "','"
-                    			+ emailText.getText()  + "','" + pnumText.getText() + "', null);";
+                		sql = "insert into member values ('" + idText.getText() + "','" + pwText.getPassword() + "','"+ nickText.getText() + "','"
+                    			+ emailText.getText() + "','"+ nameText.getText() + "','" + birthText.getText() + "','" + pnumText.getText() + "', null);";
                 	}
                 	else if(pnumText.getText().isEmpty() && !homeText.getText().isEmpty()) {
-                		sql = "insert into member values ('" + idText.getText()+ "','"+ nickText.getText() + "','"+ nameText.getText() + "','" + pwText.getPassword() 
-					 + "','" + birthText.getText()+ "','"
-                    			+ emailText.getText() + "',null'"+ homeText.getText() + "');";
+                		sql = "insert into member values ('" + idText.getText() + "','" + pwText.getPassword() + "','"+ nickText.getText() + "','"
+                    			+ emailText.getText() + "','"+ nameText.getText() + "','" + birthText.getText() + "',null'"+ homeText.getText() + "');";
                 	}else {
-                		sql = "insert into member values ('" + idText.getText() + "','"+ nickText.getText()+ "','"+ nameText.getText()+ "','" + pwText.getPassword() 
-					 + "','" + birthText.getText()+ "','" + emailText.getText() +"' ,null,null);";
+                		sql = "insert into member values ('" + idText.getText() + "','" + pwText.getPassword() + "','"+ nickText.getText() + "','"
+                    			+ emailText.getText() + "','"+ nameText.getText() + "','" + birthText.getText()+"' ,null,null);";
                 	}
                 	stmt.executeUpdate(sql);
 					JOptionPane.showMessageDialog(logPanel3, "Joined!");
