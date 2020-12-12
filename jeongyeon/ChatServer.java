@@ -25,7 +25,7 @@ public class ChatServer {
 	private static Vector<chatroom> chatrooms = new Vector<>(); //member 들어감
 	
 	public static void main(String[] args) throws Exception {	
-		String_crypto crypt = new String_crypto();
+	String_crypto crypt = new String_crypto();
 		
         int port=0;
         byte[] reads = new byte[50];
