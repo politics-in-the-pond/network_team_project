@@ -13,8 +13,9 @@ import com.mysql.cj.xdevapi.JsonParser;
 
 import java.sql.*;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
-
+import java.util.Date;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -35,11 +36,12 @@ public class FriendList extends JFrame{
 	ResultSet rs = null;
 	ResultSet rs2 = null;
 	ResultSet rs3 = null;
+	message chattingRoom;
 	String url = "jdbc:mysql://localhost/users?serverTimezone=UTC&useSSL=false&&allowPublicKeyRetrieval=true&useSSL=false";
 	String sql = null;
 	String sql2 = null;
 	Connection conn = null;
-
+	
 	/*********** JM : START ****************/
 	//프렌드 리스트 루트 노드 명 (상수 처리)
 	final String FL_NODE_ROOT = "친구목록";
@@ -50,7 +52,6 @@ public class FriendList extends JFrame{
 	/*********** JM : END ****************/
 	
 
-	
 	public void FriendListPanel(String id) throws IOException, ParseException {
 		frame = new JFrame("WaitRoom");
 		panel = new JPanel();
@@ -63,8 +64,6 @@ public class FriendList extends JFrame{
 		String userHome = null;
 		panel1.add(logoutBtn, BorderLayout.WEST);
 		panel1.add(secessionBtn,BorderLayout.EAST);
-		
-		
 		ArrayList<Friend> friendData = new ArrayList<Friend>();
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -89,7 +88,7 @@ public class FriendList extends JFrame{
 				friendData.add(friend);
 			}
 			/*********** JM : END ****************/
-
+			
 			secessionBtn.addMouseListener(new MouseAdapter(){
 				@Override
 				public void mouseClicked(MouseEvent e) {
@@ -106,6 +105,7 @@ public class FriendList extends JFrame{
 					}
 					
 				}
+
 				
 			});
 			logoutBtn.addMouseListener(new MouseAdapter(){
@@ -136,13 +136,21 @@ public class FriendList extends JFrame{
 		//홈페이지에서 받은 API key
 		StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1360000/VilageFcstInfoService/getVilageFcst");
 		//api call back url
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+
+	    Calendar c1 = Calendar.getInstance();
+
+		String strToday = sdf.format(c1.getTime());
+		
 		urlBuilder.append("?" + URLEncoder.encode("ServiceKey","UTF-8") + "=" + serviceKey );
 		urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("10","UTF-8"));//한 페이지의 결과 
 		urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1","UTF-8"));//페이지번호  
 		urlBuilder.append("&" + URLEncoder.encode("dataType","UTF-8") + "=" + URLEncoder.encode("JSON","UTF-8"));//받아올 데이터 타입  
-		urlBuilder.append("&" + URLEncoder.encode("base_date","UTF-8") + "=" + URLEncoder.encode("20201213","UTF-8"));//조회하고싶은날
+		urlBuilder.append("&" + URLEncoder.encode("base_date","UTF-8") + "=" + URLEncoder.encode(strToday,"UTF-8"));//조회하고싶은날
 		urlBuilder.append("&" + URLEncoder.encode("base_time","UTF-8") + "=" + URLEncoder.encode("1100","UTF-8"));//api 제공 시간  
-		urlBuilder.append("&" + URLEncoder.encode("nx","UTF-8") + "=" + URLEncoder.encode("55","UTF-8"));//위도 
+		urlBuilder.append("&" +
+		URLEncoder.encode("nx","UTF-8") + "=" + URLEncoder.encode("55","UTF-8"));//위도 
 		urlBuilder.append("&" + URLEncoder.encode("ny","UTF-8") + "=" + URLEncoder.encode("127","UTF-8"));//경도  
 
 		URL url = new URL(urlBuilder.toString());
@@ -165,7 +173,6 @@ public class FriendList extends JFrame{
 		conn.disconnect();
 		String result = sb.toString(); 
 		result = result.replace("<","");
-		System.out.println(result);
 		JSONParser parser = new JSONParser();
 		//JSONObject obj = (JSONObject) parser.parse(response.getBody());
 		Object obj = null;
@@ -231,7 +238,6 @@ public class FriendList extends JFrame{
 			panel3.add(l);
 			panel3.setBorder(new TitledBorder(new LineBorder(Color.black,5),"동네 날씨 예보 "));
 		}
-		
 		/*********** JM : START ****************/
 		DefaultMutableTreeNode online = new DefaultMutableTreeNode(FL_NODE_ONLINE);
 		DefaultMutableTreeNode offline = new DefaultMutableTreeNode(FL_NODE_OFFLINE);
@@ -241,10 +247,10 @@ public class FriendList extends JFrame{
 
 		for (int i = 0; i< friendData.size(); i++) {
 			Friend friend = friendData.get(i);
-			System.out.println("<"+userName + "> <" +friend.getNickName()+">");
+			//System.out.println("<"+userName + "> <" +friend.getNickName()+">");
 			if(userNick.compareTo(friend.getNickName())!=0) {				
 				DefaultMutableTreeNode node = new DefaultMutableTreeNode(friend.getNickName());
-				System.out.println(node);
+				//System.out.println(node);
 				f.add(node);
 				}
 		}
@@ -285,7 +291,8 @@ public class FriendList extends JFrame{
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					//System.out.println("Enter Chat Room!");
-					//
+					chattingRoom = new message();
+					chattingRoom.messagePanel();
 					//For multiple selection you can use
 					TreePath[] treePaths = tree.getSelectionModel().getSelectionPaths();
 				
@@ -327,6 +334,7 @@ public class FriendList extends JFrame{
 		}
 		
 		/*********** JM : END ****************/
+
 		
   
 		frame.add(panel1,BorderLayout.NORTH);
@@ -338,8 +346,6 @@ public class FriendList extends JFrame{
 		frame.setVisible(true);
 		
 	}
-
-
 
 
 	private MutableTreeNode f(int i) {
