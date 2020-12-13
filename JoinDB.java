@@ -28,7 +28,7 @@ public class JoinDB implements MouseListener {
 		JLabel birthLabel = new JLabel("Birth Date"+"\n"+"yy/mm/dd", JLabel.CENTER);
 		JLabel pnumLabel = new JLabel("Phone number(option) ", JLabel.CENTER);
 		JLabel homeLabel = new JLabel("Homepage address(option)", JLabel.CENTER);
-		
+		//id, password, nickname, birthdate, phone number, homepage address data를 받기 위한 label과 아이디,닉네임 중복체크를 위한 버튼을 생성함  
 		logPanel1.add(idLabel);
 		logPanel1.add(pwLabel);
 		logPanel1.add(pwCheckLabel);
@@ -71,11 +71,11 @@ public class JoinDB implements MouseListener {
 		checkBtn = new JButton("Check ID");
 		logPanel3.add(checkBtn, BorderLayout.EAST);
 		checkBtn.addMouseListener(this);
-		
+		//아이디 중복 체크를 위한 버튼  
 		checkNickBtn = new JButton("Check Nickname");
 		logPanel3.add(checkNickBtn,BorderLayout.EAST);
 		checkNickBtn.addMouseListener(this);
-		
+		//닉네임 중복 체크를 위한 버튼 
 		frame.add(logPanel,BorderLayout.NORTH);
 		frame.add(logPanel1,BorderLayout.WEST);
 		frame.add(logPanel2, BorderLayout.CENTER);
@@ -100,7 +100,7 @@ public class JoinDB implements MouseListener {
 				dbClose();
 			}
 		});
-		
+		//취소버튼누르면 회원가입이 취소되고, Frame이 닫
 		frame.setBounds(450,250,500,500);
 		frame.setResizable(false);
 		frame.setVisible(true);
@@ -113,7 +113,7 @@ public class JoinDB implements MouseListener {
 	String url = "jdbc:mysql://localhost/users?serverTimezone=UTC&useSSL=false&&allowPublicKeyRetrieval=true&useSSL=false";
 	Properties info = null;
 	Connection conn = null;
-	
+	//데이터베이스와 연동  
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		if(e.getSource().equals(idText))
@@ -148,9 +148,13 @@ public class JoinDB implements MouseListener {
                 rs = stmt.executeQuery(sql); // 읽어오는거라 다르다 비교해//리턴타입이 ResultSet
  
                 if (rs.next() == true || (idText.getText().isEmpty()) == true) { // 이미 id가 존재한다면
-                	JOptionPane.showMessageDialog(logPanel3, "Unavailable ID");                } 
+                	JOptionPane.showMessageDialog(logPanel3, "Unavailable ID");   
+                	//중복되는아이디라는 팝업을 띄움
+                	} 
                 else {
-                	JOptionPane.showMessageDialog(logPanel3, "Available ID");                }
+                	JOptionPane.showMessageDialog(logPanel3, "Available ID"); 
+                	//사용가능한 아이디라는 팝업을 띄움 
+                	}
             }
  
 			if (e.getSource().equals(checkNickBtn)) {
