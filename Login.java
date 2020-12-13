@@ -9,6 +9,7 @@ public class Login extends JFrame{
 	JoinDB jdb;
 	LoginDB ljdb;
 	FriendList fList;
+	waitingRoomGUI gui;
 	public Login() {
 		JPanel panel = new JPanel();
 		JLabel idLabel = new JLabel("ID");
@@ -36,6 +37,7 @@ public class Login extends JFrame{
 			}
 		});
 		
+		
 		logBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -45,16 +47,13 @@ public class Login extends JFrame{
 				int result = ljdb.checkIDPW(id,pw);
 				if(result == 0) {
 					JOptionPane.showMessageDialog(null,"Logged in");
-					fList = new FriendList();
+					gui = new waitingRoomGUI();
 					try {
-						fList.FriendListPanel(id);
+						gui.waitingGUIPanel(id);
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
-					} catch (ParseException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+					} 
 				}
 				else
 					JOptionPane.showMessageDialog(null,"Fail");
