@@ -49,6 +49,7 @@ public class FriendList extends JFrame{
 		panel3 = new JPanel();
 		logoutBtn = new JButton("Logout");
 		secessionBtn = new JButton("secession ");
+		//로그아웃과 회원탈퇴를 위한 버튼 
 		String userName = null;
 		String userNick = null;
 		String userHome = null;
@@ -61,6 +62,7 @@ public class FriendList extends JFrame{
 			conn = DriverManager.getConnection(url, user,passwd);
 			stmt = conn.createStatement();
 			sql = "select * from member where id = '" + id +  "'";
+			//사용자가 입력한 id와 일치하는 정보를 가져와 <내 정보> 패널에 표시한다. 
 			rs = stmt.executeQuery(sql);
 			while(rs.next()) {
 				userName = rs.getString("name");
@@ -88,7 +90,7 @@ public class FriendList extends JFrame{
 					frame.dispose();
 					}
 					
-				}
+				}//db에 들어있는 회원들의 정보를 arrayList에 저장한다. 
 
 				
 			});
@@ -98,8 +100,7 @@ public class FriendList extends JFrame{
 					if (e.getSource().equals(logoutBtn)) {
 					frame.dispose();
 					}
-				}
-
+				}//로그아웃 버튼을 누르면 프로그램이 닫힌다. 
 				
 			});
 			
@@ -116,6 +117,7 @@ public class FriendList extends JFrame{
 		panel1.add(userHomePanel);
 		
 		panel1.setBorder(new TitledBorder(new LineBorder(Color.black,5),"내 프로필  "));
+		//가져온 회원정보로 <내 정보>를 표시한다.
 		String serviceKey = "WdoDhkmlcQ%2FO2oKSAGprlgcCkJnlvpQz%2FuvdC%2Fo9ezvRrg05%2Fd2pfzBOBdO1TMkxn49SnDXfyCKucyqt9OrPnA%3D%3D";
 		//홈페이지에서 받은 API key
 		StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1360000/VilageFcstInfoService/getVilageFcst");
@@ -214,8 +216,8 @@ public class FriendList extends JFrame{
 			JList l = new JList(printResult.split("\n"));
 			panel3.add(l);
 			panel3.setBorder(new TitledBorder(new LineBorder(Color.black,5),"동네 날씨 예보 "));
+			//공공데이터를 패널에 출력시킨다. 
 		}
-		//전종민 시작
 		DefaultMutableTreeNode online = new DefaultMutableTreeNode("접속중인 친구");
 		DefaultMutableTreeNode offline = new DefaultMutableTreeNode("비접속중인 친구");
 		
