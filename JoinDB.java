@@ -8,6 +8,7 @@ public class JoinDB implements MouseListener {
 	JPanel logPanel;
 	JPanel logPanel1;
 	JPanel logPanel2;
+	
 	JPanel logPanel3;
 	JTextField idText,nameText, birthText, nickText, emailText, pnumText, homeText = null;
 	JPasswordField pwText, pwCheckText = null;
@@ -17,7 +18,7 @@ public class JoinDB implements MouseListener {
 		logPanel = new JPanel();
 		logPanel1 =  new JPanel(new GridLayout(9,1));
 		logPanel2 = new JPanel(new GridLayout(9,1));
-		logPanel3 = new JPanel(new GridLayout(2,1));
+		logPanel3 = new JPanel(new GridLayout(7,1));
 
 		JLabel idLabel = new JLabel("ID", JLabel.CENTER);
 		JLabel pwLabel = new JLabel("PW", JLabel.CENTER);
@@ -69,18 +70,22 @@ public class JoinDB implements MouseListener {
 		logPanel2.add(homeText);
 		
 		checkBtn = new JButton("Check ID");
+	
+
 		logPanel3.add(checkBtn, BorderLayout.EAST);
+	
 		checkBtn.addMouseListener(this);
 		//아이디 중복 체크를 위한 버튼  
 		checkNickBtn = new JButton("Check Nickname");
 		logPanel3.add(checkNickBtn,BorderLayout.EAST);
 		checkNickBtn.addMouseListener(this);
+
 		//닉네임 중복 체크를 위한 버튼 
 		frame.add(logPanel,BorderLayout.NORTH);
 		frame.add(logPanel1,BorderLayout.WEST);
 		frame.add(logPanel2, BorderLayout.CENTER);
 		frame.add(logPanel3, BorderLayout.EAST);
-		logPanel3.setPreferredSize(new Dimension(100, 50));
+		logPanel3.setPreferredSize(new Dimension(130, 10));
 
 		JPanel logPanel4 = new JPanel();
 		JLabel askLabel = new JLabel("Join?");
@@ -239,3 +244,4 @@ public class JoinDB implements MouseListener {
 		}
 	}
 }
+
