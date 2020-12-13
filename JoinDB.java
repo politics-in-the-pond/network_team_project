@@ -3,12 +3,14 @@ import java.sql.*;
 import java.util.*;
 import javax.swing.*;
 import java.awt.event.*;
+import java.math.BigInteger;
 public class JoinDB implements MouseListener {
 	JFrame frame;
 	JPanel logPanel;
 	JPanel logPanel1;
 	JPanel logPanel2;
-	
+	idcode_gen randVal;
+
 	JPanel logPanel3;
 	JTextField idText,nameText, birthText, nickText, emailText, pnumText, homeText = null;
 	JPasswordField pwText, pwCheckText = null;
@@ -172,6 +174,8 @@ public class JoinDB implements MouseListener {
                 	JOptionPane.showMessageDialog(logPanel3, "Available Nickname");                }
             }
             // 가입 버튼
+			randVal = new idcode_gen();
+			long result = randVal.make_member_code(idText.getText(), nickText.getText());
             if (e.getSource().equals(joinBtn)) {
                 sql = "select * from member where id='" + idText.getText() + "'";
  
@@ -187,18 +191,19 @@ public class JoinDB implements MouseListener {
                 } else {
                 	if(!pnumText.getText().isEmpty() && !homeText.getText().isEmpty()) {
                 	sql = "insert into member values ('" + idText.getText() + "','" + pwText.getPassword() + "','"+ nickText.getText() + "','"
-                			+ emailText.getText() + "','"+ nameText.getText() + "','" + birthText.getText() +pnumText.getText() + "','"+ homeText.getText() + "');";
+                			+ emailText.getText() + "','"+ nameText.getText() + "','" + birthText.getText() +pnumText.getText() + "','"+ homeText.getText()+ "',"+ result + ")";
                 	}
                 	else if(!pnumText.getText().isEmpty() && homeText.getText().isEmpty()) {
                 		sql = "insert into member values ('" + idText.getText() + "','" + pwText.getPassword() + "','"+ nickText.getText() + "','"
-                    			+ emailText.getText() + "','"+ nameText.getText() + "','" + birthText.getText() + "','" + pnumText.getText() + "', null);";
+                    			+ emailText.getText() + "','"+ nameText.getText() + "','" + birthText.getText() + "','" + pnumText.getText() + "', null"+ ","+ result+")";
                 	}
                 	else if(pnumText.getText().isEmpty() && !homeText.getText().isEmpty()) {
                 		sql = "insert into member values ('" + idText.getText() + "','" + pwText.getPassword() + "','"+ nickText.getText() + "','"
-                    			+ emailText.getText() + "','"+ nameText.getText() + "','" + birthText.getText() + "',null'"+ homeText.getText() + "');";
+                    			+ emailText.getText() + "','"+ nameText.getText() + "','" + birthText.getText() + "',null'"+ homeText.getText() + "',"+ result+ ")";
                 	}else {
                 		sql = "insert into member values ('" + idText.getText() + "','" + pwText.getPassword() + "','"+ nickText.getText() + "','"
-                    			+ emailText.getText() + "','"+ nameText.getText() + "','" + birthText.getText()+"' ,null,null);";
+                    			+ emailText.getText() + "','"+ nameText.getText() + "','" + birthText.getText()+"' ,null,null" + ","+ result+" )"
+                    					+ "";
                 	}
                 	stmt.executeUpdate(sql);
 					JOptionPane.showMessageDialog(logPanel3, "Joined!");
