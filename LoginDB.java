@@ -34,7 +34,7 @@ public class LoginDB{
 					else
 						result = 1;
 				}
-			}
+			}//Login.java에서  사용자가 입력한 id와 pw를 받아와 db에 있는 데이터와 대조해보고 결과를 Login.java에 전달  
 		}catch(Exception e) {
 			System.out.println("Error");
 			e.printStackTrace();
