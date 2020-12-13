@@ -13,9 +13,8 @@ import com.mysql.cj.xdevapi.JsonParser;
 
 import java.sql.*;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.Date;
+
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -28,8 +27,6 @@ public class FriendList extends JFrame{
 	JPanel panel1;
 	JPanel panel2;
 	JPanel panel3;
-	message chattingRoom;
-
 	JTree tree;
 	JButton logoutBtn;
 	JButton secessionBtn;
@@ -42,9 +39,18 @@ public class FriendList extends JFrame{
 	String sql = null;
 	String sql2 = null;
 	Connection conn = null;
-	DefaultMutableTreeNode root = new DefaultMutableTreeNode("친구목록");
+
+	/*********** JM : START ****************/
+	//프렌드 리스트 루트 노드 명 (상수 처리)
+	final String FL_NODE_ROOT = "친구목록";
+	final String FL_NODE_ONLINE = "접속중인 친구";
+	final String FL_NODE_OFFLINE = "비접속중인 친구";
+
+	DefaultMutableTreeNode root = new DefaultMutableTreeNode(FL_NODE_ROOT);
+	/*********** JM : END ****************/
 	
 
+	
 	public void FriendListPanel(String id) throws IOException, ParseException {
 		frame = new JFrame("WaitRoom");
 		panel = new JPanel();
@@ -52,20 +58,20 @@ public class FriendList extends JFrame{
 		panel3 = new JPanel();
 		logoutBtn = new JButton("Logout");
 		secessionBtn = new JButton("secession ");
-		//로그아웃과 회원탈퇴를 위한 버튼 
 		String userName = null;
 		String userNick = null;
 		String userHome = null;
 		panel1.add(logoutBtn, BorderLayout.WEST);
 		panel1.add(secessionBtn,BorderLayout.EAST);
-		ArrayList<Object> friendData = new ArrayList();
+		
+		
+		ArrayList<Friend> friendData = new ArrayList<Friend>();
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			String user = "root", passwd = "000110";
 			conn = DriverManager.getConnection(url, user,passwd);
 			stmt = conn.createStatement();
 			sql = "select * from member where id = '" + id +  "'";
-			//사용자가 입력한 id와 일치하는 정보를 가져와 <내 정보> 패널에 표시한다. 
 			rs = stmt.executeQuery(sql);
 			while(rs.next()) {
 				userName = rs.getString("name");
@@ -73,11 +79,17 @@ public class FriendList extends JFrame{
 				userHome = rs.getString("home");
 			}
 			
+			/*********** JM : START ****************/
+
 			sql2 = "select * from member";
 			rs2 = stmt.executeQuery(sql2);
 			while(rs2.next()) {
-				friendData.add(rs2.getString("nickname"));
+				//Friend friend = new Friend(rs2.getString("id"),  rs2.getString("nickname"));
+				Friend friend = new Friend(rs2.getString("id"),  rs2.getString("nickname"), Long.parseLong( rs2.getString("member_code")));
+				friendData.add(friend);
 			}
+			/*********** JM : END ****************/
+
 			secessionBtn.addMouseListener(new MouseAdapter(){
 				@Override
 				public void mouseClicked(MouseEvent e) {
@@ -93,8 +105,7 @@ public class FriendList extends JFrame{
 					frame.dispose();
 					}
 					
-				}//db에 들어있는 회원들의 정보를 arrayList에 저장한다. 
-
+				}
 				
 			});
 			logoutBtn.addMouseListener(new MouseAdapter(){
@@ -103,7 +114,8 @@ public class FriendList extends JFrame{
 					if (e.getSource().equals(logoutBtn)) {
 					frame.dispose();
 					}
-				}//로그아웃 버튼을 누르면 프로그램이 닫힌다. 
+				}
+
 				
 			});
 			
@@ -120,20 +132,15 @@ public class FriendList extends JFrame{
 		panel1.add(userHomePanel);
 		
 		panel1.setBorder(new TitledBorder(new LineBorder(Color.black,5),"내 프로필  "));
-		//가져온 회원정보로 <내 정보>를 표시한다.
 		String serviceKey = "WdoDhkmlcQ%2FO2oKSAGprlgcCkJnlvpQz%2FuvdC%2Fo9ezvRrg05%2Fd2pfzBOBdO1TMkxn49SnDXfyCKucyqt9OrPnA%3D%3D";
 		//홈페이지에서 받은 API key
 		StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1360000/VilageFcstInfoService/getVilageFcst");
 		//api call back url
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-	        Calendar c1 = Calendar.getInstance();
-		String strToday = sdf.format(c1.getTime());
-		//현재날짜를받아옴
 		urlBuilder.append("?" + URLEncoder.encode("ServiceKey","UTF-8") + "=" + serviceKey );
 		urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("10","UTF-8"));//한 페이지의 결과 
 		urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1","UTF-8"));//페이지번호  
 		urlBuilder.append("&" + URLEncoder.encode("dataType","UTF-8") + "=" + URLEncoder.encode("JSON","UTF-8"));//받아올 데이터 타입  
-		urlBuilder.append("&" + URLEncoder.encode("base_date","UTF-8") + "=" + URLEncoder.encode(strToday,"UTF-8"));//조회하고싶은날
+		urlBuilder.append("&" + URLEncoder.encode("base_date","UTF-8") + "=" + URLEncoder.encode("20201213","UTF-8"));//조회하고싶은날
 		urlBuilder.append("&" + URLEncoder.encode("base_time","UTF-8") + "=" + URLEncoder.encode("1100","UTF-8"));//api 제공 시간  
 		urlBuilder.append("&" + URLEncoder.encode("nx","UTF-8") + "=" + URLEncoder.encode("55","UTF-8"));//위도 
 		urlBuilder.append("&" + URLEncoder.encode("ny","UTF-8") + "=" + URLEncoder.encode("127","UTF-8"));//경도  
@@ -223,18 +230,20 @@ public class FriendList extends JFrame{
 			JList l = new JList(printResult.split("\n"));
 			panel3.add(l);
 			panel3.setBorder(new TitledBorder(new LineBorder(Color.black,5),"동네 날씨 예보 "));
-			//공공데이터를 패널에 출력시킨다. 
 		}
-		DefaultMutableTreeNode online = new DefaultMutableTreeNode("접속중인 친구");
-		DefaultMutableTreeNode offline = new DefaultMutableTreeNode("비접속중인 친구");
+		
+		/*********** JM : START ****************/
+		DefaultMutableTreeNode online = new DefaultMutableTreeNode(FL_NODE_ONLINE);
+		DefaultMutableTreeNode offline = new DefaultMutableTreeNode(FL_NODE_OFFLINE);
 		
 		
 		ArrayList<DefaultMutableTreeNode> f = new ArrayList<DefaultMutableTreeNode>();
 
 		for (int i = 0; i< friendData.size(); i++) {
-			System.out.println("<"+userName + "> <" +friendData.get(i).toString()+">");
-			if(userNick.compareTo(friendData.get(i).toString())!=0) {				
-				DefaultMutableTreeNode node = new DefaultMutableTreeNode(friendData.get(i));
+			Friend friend = friendData.get(i);
+			System.out.println("<"+userName + "> <" +friend.getNickName()+">");
+			if(userNick.compareTo(friend.getNickName())!=0) {				
+				DefaultMutableTreeNode node = new DefaultMutableTreeNode(friend.getNickName());
 				System.out.println(node);
 				f.add(node);
 				}
@@ -247,7 +256,14 @@ public class FriendList extends JFrame{
 			if (i%2 == 0) online.add(f.get(i));
 			else offline.add(f.get(i));
 		}
+		/*
+		online.add(f1); //이 코드를 이용해 친구의 온,오프라인 확인
+		online.add(f2);
+		online.add(f3);
 		
+		offline.add(f4);
+		offline.add(f5);
+		*/
 		tree = new JTree(root);
 		
 		tree.expandRow(1);
@@ -268,21 +284,41 @@ public class FriendList extends JFrame{
 			chatBtn.addMouseListener(new MouseAdapter(){
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					System.out.println("Enter Chat Room!");
-					chattingRoom = new message();
-					chattingRoom.messagePanel();
+					//System.out.println("Enter Chat Room!");
+					//
 					//For multiple selection you can use
 					TreePath[] treePaths = tree.getSelectionModel().getSelectionPaths();
+				
+					
+					//make_member_code 함수 호출을 위해 사용
+					idcode_gen code_gen = new idcode_gen();
+					long[] member_codes = new long[treePaths.length];
+					
+					int i = 0;
 					for (TreePath treePath : treePaths) {
 						
 						DefaultMutableTreeNode selectedElement = (DefaultMutableTreeNode)treePath.getLastPathComponent();
-					    Object userObject = selectedElement.getUserObject(); 
-					    if (friendData.contains(userObject)) {
-						    //Do what you want with selected element's user object
-						    System.out.println(userObject + " is in the list!");
-					    }
+					    Object userObject = selectedElement.getUserObject();
+					    
+					    
+					    
+						String nodename = userObject.toString();
+					    if (nodename.compareTo(FL_NODE_ROOT) != 0 && nodename.compareTo(FL_NODE_ONLINE) != 0 && nodename.compareTo(FL_NODE_OFFLINE) != 0)  {
+					    	
+					    	Friend foundF = Friend.findUsingNickname(friendData, nodename);
+					    	//long code = code_gen.make_member_code(foundF.getId(), foundF.getNickName());
+					    	long code = foundF.getMemberCode();
+							member_codes[i] = code;
+							i++;
+						    
+					    } 
 					}
-				}				
+					// message UI 부름
+					// 사용할 채팅참가 친구의 member code 목록: member_codes[] 배열 사용
+					for (long member_code : member_codes) {
+						System.out.println(member_code);
+					}
+				}
 			});
 			
 		}catch(Exception e) {
@@ -290,8 +326,7 @@ public class FriendList extends JFrame{
 			e.printStackTrace();
 		}
 		
-		
-		//전종민 끝
+		/*********** JM : END ****************/
 		
   
 		frame.add(panel1,BorderLayout.NORTH);
@@ -303,6 +338,8 @@ public class FriendList extends JFrame{
 		frame.setVisible(true);
 		
 	}
+
+
 
 
 	private MutableTreeNode f(int i) {
