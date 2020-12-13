@@ -28,6 +28,8 @@ public class FriendList extends JFrame{
 	JPanel panel1;
 	JPanel panel2;
 	JPanel panel3;
+	message chattingRoom;
+
 	JTree tree;
 	JButton logoutBtn;
 	JButton secessionBtn;
@@ -267,7 +269,8 @@ public class FriendList extends JFrame{
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					System.out.println("Enter Chat Room!");
-					//
+					chattingRoom = new message();
+					chattingRoom.messagePanel();
 					//For multiple selection you can use
 					TreePath[] treePaths = tree.getSelectionModel().getSelectionPaths();
 					for (TreePath treePath : treePaths) {
