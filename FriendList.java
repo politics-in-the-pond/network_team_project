@@ -238,14 +238,7 @@ public class FriendList extends JFrame{
 			if (i%2 == 0) online.add(f.get(i));
 			else offline.add(f.get(i));
 		}
-		/*
-		online.add(f1); //이 코드를 이용해 친구의 온,오프라인 확인
-		online.add(f2);
-		online.add(f3);
 		
-		offline.add(f4);
-		offline.add(f5);
-		*/
 		tree = new JTree(root);
 		
 		tree.expandRow(1);
