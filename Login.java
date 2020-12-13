@@ -61,6 +61,7 @@ public class Login extends JFrame{
 
 			}
 		});
+		//login 버튼을 누르면 db에 있는 data를 조회 한 후, 사용자가 입력한 id와 일치하는 id가 있는지 대조하고 있다면 로그인 성공이라는팝업창과 함께 친구목록으로 넘어감.  
 		joinBtn.addActionListener(new ActionListener() {
 
 			@Override
@@ -76,7 +77,7 @@ public class Login extends JFrame{
 				jdb = new JoinDB();
 				jdb.JoinDBPanel();
 			}
-		});
+		});//join버튼을 누르면 회원가입을 하는 팝업이 뜸  
 		add(panel);
 		setVisible(true);
 		setSize(600,400);
