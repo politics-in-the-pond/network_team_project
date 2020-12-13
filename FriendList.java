@@ -76,6 +76,7 @@ public class FriendList extends JFrame{
 			secessionBtn.addMouseListener(new MouseAdapter(){
 				@Override
 				public void mouseClicked(MouseEvent e) {
+					if (e.getSource().equals(secessionBtn)) {
 					String secessSql = "delete member where id='" + id + "'";
 					try {
 						stmt.executeUpdate(secessSql);
@@ -85,6 +86,7 @@ public class FriendList extends JFrame{
 						e1.printStackTrace();
 					}
 					frame.dispose();
+					}
 					
 				}
 
@@ -93,8 +95,9 @@ public class FriendList extends JFrame{
 			logoutBtn.addMouseListener(new MouseAdapter(){
 				@Override
 				public void mouseClicked(MouseEvent e) {
+					if (e.getSource().equals(logoutBtn)) {
 					frame.dispose();
-					
+					}
 				}
 
 				
