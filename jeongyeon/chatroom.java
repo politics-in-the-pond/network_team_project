@@ -3,35 +3,30 @@ package my_package;
 import java.util.Vector;
 
 public class chatroom {
-	
-	chatroom(boolean b, String name, String roomID, String secure){
+
+	chatroom(boolean b, String name, long roomID) {
 		this.isOpen = b;
 		this.room_name = name;
 		this.roomID = roomID;
-		this.secure = secure;
 	}
-	
-	private String roomID;
-	private String secure; //비번
-	private boolean isOpen;
-	private String room_name;
-	private Vector<member> room_members = new Vector<member>();
-	
-	public String getRoomID() {
+
+	private long roomID; // 방 고유번호
+	private boolean isOpen; // 온라인
+	private String room_name; // 방 이름
+	public Vector<member> room_members = new Vector<member>(); // 멤버들
+
+	public long getRoomID() {
 		return roomID;
 	}
-	public String getSecure() {
-		return secure;
-	}
-	public Vector<member> getRoom_members() {
-		return room_members;
-	}
-	public void add(member m) {
+
+	public void add(member m) { // 멤버추가
 		this.room_members.add(m);
 	}
+
 	public String getRoom_name() {
 		return room_name;
 	}
+
 	public void setRoom_name(String room_name) {
 		this.room_name = room_name;
 	}
