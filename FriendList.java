@@ -66,6 +66,7 @@ public class FriendList extends JFrame{
 		panel1.add(logoutBtn, BorderLayout.WEST);
 		panel1.add(secessionBtn,BorderLayout.EAST);
 		ArrayList<Friend> friendData = new ArrayList<Friend>();
+		//연결된 DB에서 회원 정보를 뽑아옴 
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			String user = "root", passwd = "000110";
@@ -228,6 +229,7 @@ public class FriendList extends JFrame{
 
 
 			String printResult = "";
+			//공공데이터에서 뽑아온 값을 String형태로 저장
 			for(i = 0 ;i < catList.size();i++) {
 				printResult += "category : " + catList.get(i) + " 예보 값:  " + fcValList.get(i) + " 예측 일자  : " + fcDateList.get(i) + " 예측 시간 : " + fcTimeList.get(i) + "\n";
 			}
@@ -236,6 +238,7 @@ public class FriendList extends JFrame{
 			JPanel weatherPanel = new JPanel();
 
 			JList l = new JList(printResult.split("\n"));
+			//printResult에 있는 값을 \n으로 구분해 JList에 
 			panel3.add(l);
 			panel3.setBorder(new TitledBorder(new LineBorder(Color.black,5),"동네 날씨 예보 "));
 		}
