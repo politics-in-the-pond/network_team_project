@@ -3,14 +3,14 @@ import java.util.Collection;
 
 import javax.swing.tree.TreePath;
 
-//Friend Data Class for Friend List
+// Friend List에서 사용할 Friend Data Class
 public class Friend {
 	private String id;
 	private String nickname;
 	private long member_code;
 	
 	
-	// Initial Function for Friend Class
+	// Friend Class 기본적인 정보
 	Friend(String id, String nickname){
 		this.id = id;
 		this.nickname = nickname;
@@ -23,7 +23,7 @@ public class Friend {
 	}
 	
 	
-	// Define Getters for the data
+	// data를 구하기 위해 Getter 새팅하기
 	public String getId() {
 		return id;
 	}
@@ -34,7 +34,6 @@ public class Friend {
 		return member_code;
 	}
 	
-	// Define Setters for the data
 	public void setMemberCode(long data) {
 		this.member_code = data ;
 	}
@@ -47,12 +46,9 @@ public class Friend {
 		return null;
 	}
 	
+	// Friend 클래스 사용 예시
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		
-		
 		ArrayList<Friend> friendData = new ArrayList<Friend>();
-		
 
 		friendData.add(new Friend("234", "eeee"));
 		friendData.add(new Friend("456", "wwerd"));
@@ -73,15 +69,9 @@ public class Friend {
 		}
 		
 		for(int j = 0; j < friendData.size(); j++) System.out.println(member_codes[j]);
-		
-
 		Friend foundF =  findUsingNickname(friendData, "고라파덕");
-		
 		System.out.println(foundF.getId() + " " + foundF.getNickName() + " was found!");
-		
 		//System.out.println(a.getId() + "  " + a.getNickName() );
-		
-
 	}
 
 }

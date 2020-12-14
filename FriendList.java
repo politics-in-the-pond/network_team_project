@@ -48,6 +48,7 @@ public class FriendList extends JFrame{
 	final String FL_NODE_ONLINE = "접속중인 친구";
 	final String FL_NODE_OFFLINE = "비접속중인 친구";
 
+	//친구목록 만들기
 	DefaultMutableTreeNode root = new DefaultMutableTreeNode(FL_NODE_ROOT);
 	/*********** JM : END ****************/
 	
@@ -83,7 +84,7 @@ public class FriendList extends JFrame{
 			sql2 = "select * from member";
 			rs2 = stmt.executeQuery(sql2);
 			while(rs2.next()) {
-				//Friend friend = new Friend(rs2.getString("id"),  rs2.getString("nickname"));
+				//sql에서 id, nickname, member_code를 Friend 형식으로 friendData에 저장하기
 				Friend friend = new Friend(rs2.getString("id"),  rs2.getString("nickname"), Long.parseLong( rs2.getString("member_code")));
 				friendData.add(friend);
 			}
@@ -239,12 +240,14 @@ public class FriendList extends JFrame{
 			panel3.setBorder(new TitledBorder(new LineBorder(Color.black,5),"동네 날씨 예보 "));
 		}
 		/*********** JM : START ****************/
+		// 친구목록 안에 있는 온라인, 오프라인 목록 만들기
 		DefaultMutableTreeNode online = new DefaultMutableTreeNode(FL_NODE_ONLINE);
 		DefaultMutableTreeNode offline = new DefaultMutableTreeNode(FL_NODE_OFFLINE);
 		
 		
 		ArrayList<DefaultMutableTreeNode> f = new ArrayList<DefaultMutableTreeNode>();
 
+		// db에서 자신을 제외한 nickname 가져와서 보여주기
 		for (int i = 0; i< friendData.size(); i++) {
 			Friend friend = friendData.get(i);
 			//System.out.println("<"+userName + "> <" +friend.getNickName()+">");
@@ -255,9 +258,11 @@ public class FriendList extends JFrame{
 				}
 		}
 		
+		// 온라인 목록과 오프라인 목록을 친구 목록에 추가하기
 		root.add(online);
 		root.add(offline);
 		
+		// 소켓이랑 연동을 하지 못해서 임시로 온라인 오프라인 나누는 코드
 		for (int i = 0; i < f.size(); i++) {
 			if (i%2 == 0) online.add(f.get(i));
 			else offline.add(f.get(i));
@@ -271,11 +276,11 @@ public class FriendList extends JFrame{
 		offline.add(f5);
 		*/
 		tree = new JTree(root);
-		
 		tree.expandRow(1);
 		tree.expandRow(5);
 		//tree.setRowHeight(50);
 		
+		// 아이콘 이미지 설정하기
 		DefaultTreeCellRenderer dt = new DefaultTreeCellRenderer();
 		dt.setOpenIcon(new ImageIcon("C:\\Users\\jeonj\\Desktop\\TermProject\\Open.gif"));
 		dt.setClosedIcon(new ImageIcon("C:\\Users\\jeonj\\Desktop\\TermProject\\Close.gif"));
@@ -285,18 +290,17 @@ public class FriendList extends JFrame{
 		
 		JScrollPane js = new JScrollPane(tree);
 		
+		// 채팅방으로 넘어가는 버튼 만들기
 		chatBtn = new JButton("Make chatroom");
 		try {
 			chatBtn.addMouseListener(new MouseAdapter(){
 				@Override
+				// "Make chatroom"버튼을 누를 시 그 전에 선택한 닉네임 값 가져오기
 				public void mouseClicked(MouseEvent e) {
-					//System.out.println("Enter Chat Room!");
 					chattingRoom = new message();
 					chattingRoom.messagePanel();
-					//For multiple selection you can use
 					TreePath[] treePaths = tree.getSelectionModel().getSelectionPaths();
 				
-					
 					//make_member_code 함수 호출을 위해 사용
 					idcode_gen code_gen = new idcode_gen();
 					long[] member_codes = new long[treePaths.length];
@@ -307,9 +311,9 @@ public class FriendList extends JFrame{
 						DefaultMutableTreeNode selectedElement = (DefaultMutableTreeNode)treePath.getLastPathComponent();
 					    Object userObject = selectedElement.getUserObject();
 					    
-					    
-					    
 						String nodename = userObject.toString();
+						
+						// 친구목록, 온라인, 오프라인 선택을 제외하고 나머지 닉네임을 선택할 때 그 닉네임 member_code 보여주기
 					    if (nodename.compareTo(FL_NODE_ROOT) != 0 && nodename.compareTo(FL_NODE_ONLINE) != 0 && nodename.compareTo(FL_NODE_OFFLINE) != 0)  {
 					    	
 					    	Friend foundF = Friend.findUsingNickname(friendData, nodename);
@@ -317,7 +321,6 @@ public class FriendList extends JFrame{
 					    	long code = foundF.getMemberCode();
 							member_codes[i] = code;
 							i++;
-						    
 					    } 
 					}
 					// message UI 부름
