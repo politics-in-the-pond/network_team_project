@@ -20,7 +20,7 @@ public class String_crypto {
 	final long UMASK = 0x80000000L;
 	final long LMASK = 0x7fffffffL;
 
-	private byte[] encrypt(String s) {
+	private byte[] encrypt(String s) { // 암호화
 
 		byte[] buffer;
 		byte[] check_sum = new byte[20];
@@ -105,7 +105,7 @@ public class String_crypto {
 		return send;
 	}
 
-	private byte[] fencrypt(byte[] buffer) {
+	private byte[] fencrypt(byte[] buffer) { // 파일암호화
 		byte[] check_sum = new byte[20];
 
 		check_sum = checksum(buffer);
@@ -187,7 +187,7 @@ public class String_crypto {
 		return send;
 	}
 
-	private String decrypt(byte[] b) {
+	private String decrypt(byte[] b) { // 복호화
 		byte[] check_sum = new byte[20];
 		byte[] check_sum_Contrast = new byte[20];
 		byte[] s = new byte[b.length - 20];
@@ -274,7 +274,7 @@ public class String_crypto {
 		return send;
 	}
 
-	private byte[] fdecrypt(byte[] b) {
+	private byte[] fdecrypt(byte[] b) { // 파일 복호화
 		byte[] check_sum = new byte[20];
 		byte[] check_sum_Contrast = new byte[20];
 		byte[] s = new byte[b.length - 20];
@@ -453,7 +453,7 @@ public class String_crypto {
 		return y;
 	}
 
-	private byte[] checksum(byte[] message_bin) {
+	private byte[] checksum(byte[] message_bin) { // SHA-1체크섬 생성
 		try {
 			MessageDigest md = MessageDigest.getInstance("SHA-1");
 			md.update(message_bin);
@@ -479,10 +479,26 @@ public class String_crypto {
 		return (arr[0] & 0xff) << 24 | (arr[1] & 0xff) << 16 | (arr[2] & 0xff) << 8 | (arr[3] & 0xff);
 	}
 
+	public byte[] itob(int port) {
+		byte[] bytes = new byte[4];
+		bytes[0] = (byte) ((port & 0xFF000000) >> 24);
+		bytes[1] = (byte) ((port & 0x00FF0000) >> 16);
+		bytes[2] = (byte) ((port & 0x0000FF00) >> 8);
+		bytes[3] = (byte) (port & 0x000000FF);
+		return bytes;
+	}
+
 	public byte[] ltob(long x) {
 		ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
 		buffer.putLong(x);
 		return buffer.array();
+	}
+
+	public long btol(byte[] bytes) {
+		ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
+		buffer.put(bytes);
+		buffer.flip();
+		return buffer.getLong();
 	}
 
 	public byte[] do_encrypt(String s) {
