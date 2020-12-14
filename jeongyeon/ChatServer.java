@@ -1,21 +1,14 @@
 package my_package;
 
-import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Scanner;
 import java.util.Vector;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -53,7 +46,7 @@ public class ChatServer {
 	}
 
 	private static class Handler implements Runnable {
-		private String nameID = "10101011"; // 회원번호 임시
+		private long nameID = 210302131; // 회원번호 임시
 		private Socket socket;
 		private InputStream is;
 		private DataInputStream in;
@@ -67,7 +60,7 @@ public class ChatServer {
 
 		public void run() { // 스레드 내부에서 작동하는 함수
 			member me = new member();
-			byte[] temp = new byte[16777216];
+			byte[] temp = new byte[16870911];
 			byte type = 0x00;
 			try {
 				is = socket.getInputStream(); // 입력
@@ -88,9 +81,9 @@ public class ChatServer {
 
 					//
 					// DB에서 ID에 맞는 nameID 불러오기
-					//
+					// null = nameID = 0
 
-					if (nameID == null) {
+					if (nameID == 0x0000000000000000L) {
 						out.write(crypt.do_encrypt("error 0")); // 회원이 아님
 						out.flush();
 						return;
@@ -126,10 +119,61 @@ public class ChatServer {
 					byte[] input = new byte[how_many - 17];
 					System.arraycopy(temp, 17, input, 0, how_many - 17);
 					type = temp[0]; // type 00 = 공백, 01 = 설정&쿼리, 02 = 메시지, 03 = 파일
-					long chatroomID;
-					long srcuserID;
 
-					if (type == 0x02) {
+					if (type == 0x01) {
+						byte setting = temp[1];
+
+						if (setting == 0x01) { // 친구초대
+							int mem_num = (how_many - 11) / 8;
+							byte isopen = temp[2]; // 0x01 열림 0x02닫힘
+							byte[] room_codeb = new byte[8];
+							byte[] temp_memb = new byte[8];
+							long room_code;
+							long temp_mem;
+							boolean open;
+							System.arraycopy(temp, 2, room_codeb, 0, 8);
+							room_code = crypt.btol(room_codeb);
+
+							if (isopen == 0x01)
+								open = true;
+							else
+								open = false;
+
+							chatroom newroom = new chatroom(open, null, room_code);
+							for (int i = 0; i < mem_num; i++) {
+								System.arraycopy(temp, 11 + 8 * i, temp_memb, 0, 8);
+								temp_mem = crypt.btol(temp_memb);
+
+							}
+
+						}
+
+						if (setting == 0x02) {
+
+						}
+
+						if (setting == 0x03) {
+
+						}
+
+						if (setting == 0x04) {
+
+						}
+
+						if (setting == 0x05) {
+
+						}
+
+						if (setting == 0x06) {
+
+						}
+
+						if (setting == 0x07) {
+
+						}
+					}
+
+					if (type == 0x02) { // 평문전송
 						String input_str = crypt.do_decrypt(input);
 						System.out.println(input_str);
 						byte[] output = new byte[how_many];
@@ -139,13 +183,13 @@ public class ChatServer {
 							mb.getWriter().flush();
 						}
 					}
-					if (type == 0x03) {
+					if (type == 0x03) { // 파일전송
 						System.out.println(how_many);
 						byte[] number = new byte[4];
-						byte[] header = new byte[21];
+						byte[] header = new byte[how_many];
 						int block_num = 0;
 						System.arraycopy(temp, 17, number, 0, 4);
-						System.arraycopy(temp, 0, header, 0, 21);
+						System.arraycopy(temp, 0, header, 0, how_many);
 						for (member mb : members) {
 							mb.getWriter().write(header);
 							mb.getWriter().flush();
@@ -162,23 +206,12 @@ public class ChatServer {
 							}
 						}
 					}
-					String tmpchatroomid = null;
-
-					/*
-					 * for(chatroom cr : chatrooms) { if(tmpchatroomid.equals(cr.getRoomID())) { for
-					 * (member mem : cr.room_members) {
-					 * mem.getWriter().println(crypt.do_encrypt("MSG" + input + "@" + me.getNameid()
-					 * +"$"+cr.getRoomID())); } } }
-					 */
-
 				}
 			} catch (Exception e) {
 				System.out.println(e);
 			} finally { // 클라이언트 종료 시 배열리스트들에서 제거
 				if (me.getWriter() != null) {
 					members.remove(me);
-				}
-				if (nameID != null) {
 					System.out.println(nameID + " is leaving");
 					for (member mem : members) {
 						try {
