@@ -2,7 +2,7 @@ package my_package;
 
 import java.text.SimpleDateFormat;
 
-public class filename_gen {
+public class filename_gen { // 파일이름 생성
 	int count = 0;
 	String app_name = "cryptalk"; // 바꿔도 돼요...
 	String before_time = "a";
