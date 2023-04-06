@@ -7,6 +7,8 @@
 ![image](https://user-images.githubusercontent.com/74289147/230390826-52118093-ecc0-4697-a02f-ac66d3aeae9f.png)
 ![image](https://user-images.githubusercontent.com/74289147/230390885-8d4ed969-ca27-45e7-ba45-e0d117512525.png)
 ![image](https://user-images.githubusercontent.com/74289147/230391039-ccfb85bb-0d3c-4312-98cf-cb3b032a0283.png)
+
+- Friend list
 ![image](https://user-images.githubusercontent.com/74289147/230391206-1d77535b-3d22-4df7-b01f-085a6cf106c0.png)
 ![image](https://user-images.githubusercontent.com/74289147/230391314-cd3f2f94-5b31-4c80-a823-fb3cf5966916.png)
 
@@ -25,5 +27,9 @@
 
 ## Header declaration
 ![image](https://user-images.githubusercontent.com/74289147/230391882-0e494dc2-1a69-4ae5-ab24-0b59866a2828.png)
+
+## Roles
+![image](https://user-images.githubusercontent.com/74289147/230393252-98c2cd83-8395-4613-8a8b-315c3211c4c0.png)
+
 
 
