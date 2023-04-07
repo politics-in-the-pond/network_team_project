@@ -25,7 +25,7 @@
 - ID code generation
 ![image](https://user-images.githubusercontent.com/74289147/230392383-f2fc5d4a-e736-40eb-909b-ac00540a211b.png)
 
-## Header declaration
+## Protocol & header
 ![image](https://user-images.githubusercontent.com/74289147/230391882-0e494dc2-1a69-4ae5-ab24-0b59866a2828.png)
 
 ## Roles
